@@ -36,14 +36,12 @@
   </script>
 
   <style>
-    /* --- GERAL --- */
     body {
       background-color: #ffffff;
       color: #334155;
       overflow-x: hidden;
     }
 
-    /* Header Animation Canvas */
     #header-canvas {
       position: absolute;
       top: 0;
@@ -54,7 +52,6 @@
       pointer-events: none;
     }
 
-    /* --- LIQUID GLASS CARD DESIGN --- */
     .liquid-glass-card {
       height: 100%;
       display: flex;
@@ -62,63 +59,45 @@
       border-radius: 1rem;
       position: relative;
       overflow: hidden;
-      /* Essencial para o brilho não vazar */
-
-      /* Efeito Vidro Base */
       background: rgba(255, 255, 255, 0.7);
-      /* Branco semi-transparente */
       backdrop-filter: blur(12px) saturate(120%);
-      /* Desfoque do fundo */
       -webkit-backdrop-filter: blur(12px) saturate(120%);
       border: 1px solid rgba(255, 255, 255, 0.6);
-      /* Borda de vidro sutil */
       box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.05),
         0 2px 4px -1px rgba(0, 0, 0, 0.03),
         inset 0 0 20px rgba(255, 255, 255, 0.5);
-      /* Brilho interno */
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Elemento do Brilho que passa (O "Liquid") */
     .liquid-glass-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: -150%;
-      /* Começa fora da tela */
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg,
           transparent,
           rgba(255, 255, 255, 0.6),
-          /* Cor do brilho */
           transparent);
       transform: skewX(-25deg);
-      /* Inclina o reflexo */
       transition: left 0.7s ease-in-out;
-      /* Velocidade da passagem */
       pointer-events: none;
       z-index: 2;
     }
 
-    /* Hover State */
     .liquid-glass-card:hover {
       transform: translateY(-8px);
       border-color: rgba(255, 193, 14, 0.5);
-      /* Borda amarela no hover */
       box-shadow:
         0 20px 30px -5px rgba(0, 108, 165, 0.15),
-        /* Sombra azulada */
         inset 0 0 30px rgba(255, 255, 255, 0.9);
-      /* Brilho interno mais forte */
       background: rgba(255, 255, 255, 0.85);
     }
 
-    /* Dispara a animação do brilho */
     .liquid-glass-card:hover::before {
       left: 150%;
-      /* Move para o outro lado */
     }
 
     .card-img-container {
@@ -141,7 +120,6 @@
       transform: scale(1.1);
     }
 
-    /* --- VALUES GRID (Também com efeito vidro sutil) --- */
     .value-item {
       background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(8px);
@@ -160,12 +138,10 @@
       transform: translateY(-3px);
     }
 
-    /* --- MAPA NORMAL --- */
     iframe {
       filter: none !important;
     }
 
-    /* --- ANIMAÇÕES PERSONALIZADAS --- */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -232,7 +208,6 @@
       animation: pulse 2s infinite;
     }
 
-    /* --- BOTÃO VOLTAR AO TOPO --- */
     #back-to-top {
       position: fixed;
       bottom: 30px;
@@ -263,7 +238,6 @@
       transform: translateY(-5px);
     }
 
-    /* --- PROGRESS BAR --- */
     #reading-progress {
       position: fixed;
       top: 0;
@@ -275,7 +249,6 @@
       transition: width 0.3s ease;
     }
 
-    /* --- NAVEGAÇÃO FIXA --- */
     .sticky-nav {
       position: sticky;
       top: 0;
@@ -284,7 +257,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    /* --- ANIMAÇÃO DE TEXTO GRADIENTE --- */
     .gradient-text {
       background: linear-gradient(45deg, #006CA5, #004C74, #FFC20E, #D4A000);
       background-size: 300% 300%;
@@ -308,7 +280,6 @@
       }
     }
 
-    /* --- ANIMAÇÃO DE ENTRADA PARA SEÇÕES --- */
     .section-hidden {
       opacity: 0;
       transform: translateY(30px);
@@ -324,10 +295,8 @@
 
 <body class="flex flex-col min-h-screen">
 
-  <!-- Barra de Progresso -->
   <div id="reading-progress"></div>
 
-  <!-- Botão Voltar ao Topo -->
   <div id="back-to-top">
     <i class="fa-solid fa-chevron-up"></i>
   </div>
@@ -586,7 +555,7 @@
             <img src="image/npj.jpg" alt="Acompanhamento NPJ">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento NPJ</h3>
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
             <p class="text-sm text-gray-600 flex-1">Sistema que facilita o acompanhamento dos processos do NPJ, oferecendo ao professor mais controle e organização sobre cada caso.</p>
           </div>
         </div>
@@ -646,6 +615,13 @@
           </div>
         </div>
 
+      </div>
+
+      <div class="text-center mt-12 animate-fade-in-up" style="animation-delay: 1s;">
+        <a href="projetos.html" class="inline-block px-8 py-4 rounded-lg bg-brand-blue text-white font-bold shadow-lg hover:bg-brand-darkblue hover:text-white transition-all duration-300 transform hover:-translate-y-1">
+          Ver Mais
+          <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
       </div>
     </div>
   </section>
@@ -738,10 +714,10 @@
             <a href="https://unifapce.edu.br" title="Portal" class="w-10 h-10 rounded-full bg-white/20 hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all duration-300 border border-white/30">
               <i class="fa-solid fa-graduation-cap text-lg"></i>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/school/unifapce" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/user/FaculdadeParaiso" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.facebook.com/unifapce" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/nextiunifap" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-instagram"></i></a>
           </div>
         </div>
 
@@ -766,18 +742,18 @@
 
       <div class="border-t border-white/20 mt-12 pt-8 text-center text-xs text-blue-200">
         <p>© 2025 NExTI - Todos os direitos reservados.</p>
+        <p>Desenvolvido por Theo Natan</p>
       </div>
     </div>
   </footer>
 
   <script>
-    // Animação das partículas no header
+
     const canvas = document.getElementById('header-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
 
     function setCanvasSize() {
-      // Altura baseada apenas no header
       const header = document.querySelector('header');
       canvas.width = window.innerWidth;
       canvas.height = header.offsetHeight;
@@ -789,7 +765,6 @@
     });
     setCanvasSize();
 
-    // Mouse position
     let mouse = {
       x: null,
       y: null,
@@ -797,7 +772,6 @@
     }
 
     window.addEventListener('mousemove', function (event) {
-      // Ajuste para coordenadas relativas ao viewport, mas verificando se está sobre o header
       const headerRect = document.querySelector('header').getBoundingClientRect();
       if (event.y <= headerRect.height) {
         mouse.x = event.x;
@@ -832,7 +806,6 @@
           this.directionY = -this.directionY;
         }
 
-        // Interação com o mouse
         if (mouse.x != null) {
           let dx = mouse.x - this.x;
           let dy = mouse.y - this.y;
@@ -906,7 +879,6 @@
     initParticles();
     animateParticles();
 
-    // Barra de progresso de leitura
     const progressBar = document.getElementById('reading-progress');
     window.addEventListener('scroll', () => {
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -914,7 +886,6 @@
       progressBar.style.width = scrolled + '%';
     });
 
-    // Botão Voltar ao Topo
     const backToTopButton = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 300) {
@@ -931,7 +902,6 @@
       });
     });
 
-    // Animação de entrada para elementos ao rolar
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
@@ -945,13 +915,11 @@
       });
     }, observerOptions);
 
-    // Observar todas as seções
     document.querySelectorAll('section').forEach(section => {
       section.classList.add('section-hidden');
       observer.observe(section);
     });
 
-    // Navegação suave
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();

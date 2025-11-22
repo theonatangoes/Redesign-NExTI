@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NExTI - Nossa Equipe</title>
+  <title>NExTI - Projetos</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="shortcut icon" href="image/Faviconn-nexti.png" type="image/x-icon">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -50,19 +50,25 @@
     }
 
     .liquid-glass-card {
+      /* Vidro Base */
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(12px) saturate(120%);
       -webkit-backdrop-filter: blur(12px) saturate(120%);
       border-radius: 1rem;
-      padding: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.8);
+
       box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.05),
         0 2px 4px -1px rgba(0, 0, 0, 0.03),
         inset 0 0 20px rgba(255, 255, 255, 0.5);
+
       position: relative;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .liquid-glass-card::before {
@@ -95,37 +101,43 @@
       left: 150%;
     }
 
-    .team-img-container {
-      position: relative;
-      border-radius: 0.75rem;
+    .project-card-img {
+      height: 220px;
+      width: 100%;
       overflow: hidden;
-      aspect-ratio: 1 / 1;
+      position: relative;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
       z-index: 5;
     }
 
-    .team-img-container img {
+    .project-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.5s ease;
     }
 
-    .liquid-glass-card:hover .team-img-container img {
+    .liquid-glass-card:hover .project-card-img img {
       transform: scale(1.1);
     }
 
-    .card-content {
-      position: relative;
-      z-index: 5;
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .team-overlay {
-      background: rgba(0, 108, 165, 0.8);
-      backdrop-filter: blur(4px);
-    }
-
-    .text-gradient-title {
-      background: linear-gradient(135deg, #006CA5 0%, #004C74 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
     }
 
     iframe {
@@ -163,187 +175,146 @@
     </div>
   </header>
 
-  <section class="pt-20 pb-12 bg-white relative z-10">
-    <div class="container mx-auto px-6 text-center">
-      <span class="inline-block py-1 px-4 rounded-full bg-blue-50 text-brand-blue text-xs font-bold tracking-wider mb-4 border border-brand-blue/20">NOSSO TIME</span>
-      <h1 class="font-display text-4xl md:text-6xl font-bold text-slate-900 mb-4">Conheça nossos <span class="text-gradient-title">Talentos</span></h1>
-      <p class="text-gray-600 max-w-2xl mx-auto text-lg">A equipe multidisciplinar que transforma desafios em soluções inovadoras.</p>
-    </div>
-  </section>
-
-  <section class="pb-24 bg-brand-gray relative overflow-hidden">
-
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-200/30 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-200/20 rounded-full filter blur-[80px] pointer-events-none z-0"></div>
+  <section id="projetos" class="py-24 bg-brand-gray relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-blue-100 rounded-full filter blur-[150px] opacity-40 pointer-events-none"></div>
 
     <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="font-display text-4xl font-bold text-slate-900 mb-2">Projetos <span class="text-brand-blue">NExTI</span></h2>
+        <p class="text-gray-500">Soluções reais desenvolvidas pelos nossos talentos.</p>
+      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/fabricio-CLG1CeQt.jpg" alt="Fabrício" class="w-full h-full object-cover">
-            <div class="absolute inset-0 team-overlay flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-              <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-solid fa-envelope"></i></a>
-            </div>
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.1s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/Ponto.png" alt="Ponto Eletrônico">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-xl font-bold text-slate-900 font-display">Fabrício Carneiro</h3>
-            <p class="text-brand-yellow font-bold text-xs uppercase tracking-widest mt-1">Coordenador</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Ponto Eletrônico</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">O Ponto Eletrônico consiste em um ambiente virtual em que os alunos possam registrar seu ponto de entrada e saída com segurança.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/francisco-DwrxvW5U.jpg" alt="Francisco" class="w-full h-full object-cover">
-            <div class="absolute inset-0 team-overlay flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/PEstagio.png" alt="Plataforma de Estágio">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-xl font-bold text-slate-900 font-display">Francisco Rodrigues</h3>
-            <p class="text-brand-blue font-bold text-xs uppercase tracking-widest mt-1">Professor</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Plataforma de Estágio</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">A Plataforma de estágio conecta empresas e alunos, facilitando a inserção no mercado de trabalho através de vagas exclusivas.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/beatriz-BgsB5u17.jpg" alt="Beatriz" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.3s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/BancoT.png" alt="Banco de Talentos">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Beatriz Rolim</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/brenda-ryV-Lxx3.jpg" alt="Brenda" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Brenda Evelyn</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Banco de Talentos</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">O banco de talentos mapeia as habilidades dos alunos para aprimorar seus pontos fortes e direcioná-los às melhores oportunidades.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/caio-CUpXOQac.jpg" alt="Caio" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.4s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/npj.jpg" alt="Acompanhamento NPJ">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Caio Tarso</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/gabriel-CUmmiyCS.jpg" alt="Gabriel" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Gabriel Lucas</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Sistema que facilita o acompanhamento dos processos do Núcleo de Prática Jurídica, oferecendo controle total sobre cada caso.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/ian-Bvs2Mjel.jpg" alt="Ian" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.5s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/doacao.jpg" alt="Sistema de Doação">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Ian Caleb</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/icaro-BNL4Nhno.jpg" alt="Ícaro" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Ícaro Moreira</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Sistema de Doação</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Plataforma para instituições filantrópicas cadastrarem doadores e gerenciarem a vinculação de doações via conta de energia.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/igor-DXEhxhMM.jpg" alt="Igor" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.6s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/web.jpg" alt="Vocabulário Web">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Igor Nunes</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/leonardo-Df4rxDs7.jpg" alt="Leonardo" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Leonardo Morais</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Vocabulário Web</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Um sistema de dicionário web interativo que facilita o aprendizado de termos técnicos em inglês de forma gamificada.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/luiz-CVf72gXm.jpg" alt="Luiz" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.7s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/declara-o.jpg" alt="Gerador de Declarações">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Luis Sanches</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/pedro-NW3ppLNb.jpg" alt="Pedro" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Pedro Alexandre</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Gerador de Declarações</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Automação que gera declarações e relatórios personalizados instantaneamente com base nos dados acadêmicos.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/raissa-Cc1-x62x.jpg" alt="Raissa" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.8s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/empreendedorismo.jpg" alt="Sistema Empreendedorismo">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Raissa Zacarias</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Aluno</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/sergio-06x3qRTj.jpg" alt="Sergio" class="w-full h-full object-cover">
-          </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Sergio Lucas</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Sistema Empreendedorismo</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Portal CMS para gerenciamento de conteúdos sobre empreendedorismo, incluindo artigos, mídias e entrevistas.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/thiago-BaMoLzyb.jpg" alt="Thiago T" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.9s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/orcamento-servico.jpg" alt="Orçamento Serviço">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Thiago Tavares</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Orçamento de Serviços de Segurança</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Aplicativo mobile para criação rápida e gerenciamento de orçamentos de produtos e serviços de segurança.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group">
-          <div class="team-img-container mb-4">
-            <img src="image/lucas-iRXy-XoV.jpg" alt="Thiago B" class="w-full h-full object-cover">
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 1.0s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/controle-notas.jpg" alt="Sistema de Monitoria" class="p-8 bg-white object-contain">
           </div>
-          <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Thiago Borges</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Controle de notas</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Um sistema que permite que os professores realizem a gerência das notas dos alunos de forma otimizada, facilitando a observação de métricas e acompanhamento da turma.</p>
+          </div>
+        </div>
+
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 1.1s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/ipc.jpg" alt="Gestão de Laboratórios" class="p-8 bg-white object-contain">
+          </div>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Sediar Maratona de Programação</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Um site para exibir informações necessárias sobre a nossa sede para os alunos interessados em participar da maratona.</p>
+          </div>
+        </div>
+
+        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 1.2s;">
+          <div class="project-card-img">
+            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+            <img src="image/eventos.png" alt="Portal da Transparência" class="p-8 bg-white object-contain">
+          </div>
+          <div class="p-6 flex flex-col flex-1 relative z-10">
+            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">App Eventos</h3>
+            <p class="text-sm text-gray-600 flex-1 text-justify">Uma plataforma simples que ajuda a organizar eventos do NExTI, permitindo que os participantes colaborem indicando o que vão levar.</p>
           </div>
         </div>
 
@@ -398,6 +369,7 @@
 
 
   <script>
+
     const canvas = document.getElementById('header-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -421,7 +393,6 @@
     }
 
     window.addEventListener('mousemove', function (event) {
-
       const headerRect = document.querySelector('header').getBoundingClientRect();
       if (event.y <= headerRect.height) {
         mouse.x = event.x;
