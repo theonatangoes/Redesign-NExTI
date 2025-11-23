@@ -12,6 +12,7 @@
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -32,11 +33,25 @@
     }
   </script>
 
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+
   <style>
     body {
       background-color: #f8fafc;
       color: #334155;
       overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark body {
+      background-color: #0f172a;
+      color: #cbd5e1;
     }
 
     #header-canvas {
@@ -65,6 +80,12 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    .dark .liquid-glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
     .liquid-glass-card::before {
       content: '';
       position: absolute;
@@ -82,6 +103,13 @@
       z-index: 10;
     }
 
+    .dark .liquid-glass-card::before {
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent);
+    }
+
     .liquid-glass-card:hover {
       transform: translateY(-8px);
       background: rgba(255, 255, 255, 0.85);
@@ -89,6 +117,12 @@
       box-shadow:
         0 20px 30px -5px rgba(0, 108, 165, 0.15),
         inset 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+
+    .dark .liquid-glass-card:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: #FFC20E;
+      box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.5);
     }
 
     .liquid-glass-card:hover::before {
@@ -128,15 +162,22 @@
       -webkit-text-fill-color: transparent;
     }
 
+    .dark .text-gradient-title {
+      background: linear-gradient(135deg, #FFC20E 0%, #D4A000 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     iframe {
       filter: none !important;
     }
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen dark:bg-slate-900 transition-colors duration-300">
 
-  <header class="relative bg-brand-blue text-white shadow-lg">
+  <header class="relative bg-brand-blue text-white shadow-lg dark:bg-slate-900 dark:border-b dark:border-white/10 transition-colors duration-300">
     <canvas id="header-canvas"></canvas>
 
     <div class="container mx-auto px-6 py-4 relative z-10">
@@ -155,6 +196,10 @@
             <a href="https://www.instagram.com/nextiunifap" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-blue transition-all"><i class="fa-brands fa-instagram text-sm"></i></a>
           </div>
 
+          <button id="theme-toggle" class="w-10 h-10 rounded-full bg-white/20 hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all duration-300 border border-white/30" title="Alternar Tema">
+            <i class="fa-solid fa-moon text-lg"></i>
+          </button>
+
           <a href="index.html" class="px-6 py-2.5 rounded-lg bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white transition-all flex items-center gap-2 shadow-lg shadow-yellow-500/20">
             <i class="fa-solid fa-arrow-left"></i> Voltar
           </a>
@@ -163,18 +208,18 @@
     </div>
   </header>
 
-  <section class="pt-20 pb-12 bg-white relative z-10">
+  <section class="pt-20 pb-12 bg-white dark:bg-slate-900 relative z-10 transition-colors duration-300">
     <div class="container mx-auto px-6 text-center">
-      <span class="inline-block py-1 px-4 rounded-full bg-blue-50 text-brand-blue text-xs font-bold tracking-wider mb-4 border border-brand-blue/20">NOSSO TIME</span>
-      <h1 class="font-display text-4xl md:text-6xl font-bold text-slate-900 mb-4">Conheça nossos <span class="text-gradient-title">Talentos</span></h1>
-      <p class="text-gray-600 max-w-2xl mx-auto text-lg">A equipe multidisciplinar que transforma desafios em soluções inovadoras.</p>
+      <span class="inline-block py-1 px-4 rounded-full bg-blue-50 dark:bg-slate-800 text-brand-blue dark:text-brand-yellow text-xs font-bold tracking-wider mb-4 border border-brand-blue/20 dark:border-brand-yellow/20">NOSSO TIME</span>
+      <h1 class="font-display text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4">Conheça nossos <span class="text-gradient-title">Talentos</span></h1>
+      <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">A equipe multidisciplinar que transforma desafios em soluções inovadoras.</p>
     </div>
   </section>
 
-  <section class="pb-24 bg-brand-gray relative overflow-hidden">
+  <section class="pt-20 pb-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
 
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-200/30 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-200/20 rounded-full filter blur-[80px] pointer-events-none z-0"></div>
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-200/30 dark:bg-blue-900/20 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-200/20 dark:bg-yellow-900/10 rounded-full filter blur-[80px] pointer-events-none z-0"></div>
 
     <div class="container mx-auto px-6 relative z-10">
 
@@ -184,12 +229,12 @@
           <div class="team-img-container mb-4">
             <img src="image/fabricio-CLG1CeQt.jpg" alt="Fabrício" class="w-full h-full object-cover">
             <div class="absolute inset-0 team-overlay flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.linkedin.com/in/fabricio-carneiro-42775632" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
               <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-solid fa-envelope"></i></a>
             </div>
           </div>
           <div class="text-center card-content">
-            <h3 class="text-xl font-bold text-slate-900 font-display">Fabrício Carneiro</h3>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white font-display transition-colors">Fabrício Carneiro</h3>
             <p class="text-brand-yellow font-bold text-xs uppercase tracking-widest mt-1">Coordenador</p>
           </div>
         </div>
@@ -198,12 +243,12 @@
           <div class="team-img-container mb-4">
             <img src="image/francisco-DwrxvW5U.jpg" alt="Francisco" class="w-full h-full object-cover">
             <div class="absolute inset-0 team-overlay flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a href="#" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.linkedin.com/in/rodriguesfas" class="w-10 h-10 rounded-full bg-white text-brand-blue hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
           </div>
           <div class="text-center card-content">
-            <h3 class="text-xl font-bold text-slate-900 font-display">Francisco Rodrigues</h3>
-            <p class="text-brand-blue font-bold text-xs uppercase tracking-widest mt-1">Professor</p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white font-display transition-colors">Francisco Rodrigues</h3>
+            <p class="text-brand-blue dark:text-blue-300 font-bold text-xs uppercase tracking-widest mt-1">Professor</p>
           </div>
         </div>
 
@@ -212,8 +257,8 @@
             <img src="image/beatriz-BgsB5u17.jpg" alt="Beatriz" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Beatriz Rolim</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Beatriz Rolim</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -222,8 +267,8 @@
             <img src="image/brenda-ryV-Lxx3.jpg" alt="Brenda" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Brenda Evelyn</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Brenda Evelyn</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
           </div>
         </div>
 
@@ -232,8 +277,8 @@
             <img src="image/caio-CUpXOQac.jpg" alt="Caio" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Caio Tarso</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Caio Tarso</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -242,8 +287,8 @@
             <img src="image/gabriel-CUmmiyCS.jpg" alt="Gabriel" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Gabriel Lucas</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Gabriel Lucas</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -252,8 +297,8 @@
             <img src="image/ian-Bvs2Mjel.jpg" alt="Ian" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Ian Caleb</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Ian Caleb</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -262,8 +307,8 @@
             <img src="image/icaro-BNL4Nhno.jpg" alt="Ícaro" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Ícaro Moreira</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Ícaro Moreira</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -272,8 +317,8 @@
             <img src="image/igor-DXEhxhMM.jpg" alt="Igor" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Igor Nunes</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Igor Nunes</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -282,8 +327,8 @@
             <img src="image/leonardo-Df4rxDs7.jpg" alt="Leonardo" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Leonardo Morais</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Leonardo Morais</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -292,8 +337,8 @@
             <img src="image/luiz-CVf72gXm.jpg" alt="Luiz" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Luis Sanches</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Luis Sanches</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -302,8 +347,8 @@
             <img src="image/pedro-NW3ppLNb.jpg" alt="Pedro" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Pedro Alexandre</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Pedro Alexandre</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Frontend</p>
           </div>
         </div>
 
@@ -312,8 +357,8 @@
             <img src="image/raissa-Cc1-x62x.jpg" alt="Raissa" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Raissa Zacarias</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Aluno</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Raissa Zacarias</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Aluno</p>
           </div>
         </div>
 
@@ -322,8 +367,8 @@
             <img src="image/sergio-06x3qRTj.jpg" alt="Sergio" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Sergio Lucas</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Sergio Lucas</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -332,8 +377,8 @@
             <img src="image/thiago-BaMoLzyb.jpg" alt="Thiago T" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Thiago Tavares</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Thiago Tavares</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -342,8 +387,8 @@
             <img src="image/lucas-iRXy-XoV.jpg" alt="Thiago B" class="w-full h-full object-cover">
           </div>
           <div class="text-center card-content">
-            <h3 class="text-lg font-bold text-slate-900 font-display">Thiago Borges</h3>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-display transition-colors">Thiago Borges</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">Dev Fullstack</p>
           </div>
         </div>
 
@@ -351,7 +396,7 @@
     </div>
   </section>
 
-  <footer id="contato" class="bg-brand-blue text-white pt-16 pb-8">
+  <footer id="contato" class="bg-brand-blue dark:bg-slate-900 text-white pt-16 pb-8 transition-colors duration-300">
     <div class="container mx-auto px-6">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
 
@@ -398,6 +443,34 @@
 
 
   <script>
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    const html = document.documentElement;
+
+    function updateIcon() {
+      if (html.classList.contains('dark')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+
+    updateIcon();
+
+    themeToggleBtn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+
+      if (html.classList.contains('dark')) {
+        localStorage.theme = 'dark';
+      } else {
+        localStorage.theme = 'light';
+      }
+      updateIcon();
+    });
+
     const canvas = document.getElementById('header-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -508,8 +581,8 @@
       let opacityValue = 1;
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
 
           if (distance < (canvas.width / 7) * (canvas.height / 7)) {
             opacityValue = 1 - (distance / 20000);

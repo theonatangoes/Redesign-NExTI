@@ -9,12 +9,11 @@
   <link rel="shortcut icon" href="image/Faviconn-nexti.png" type="image/x-icon">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -35,11 +34,30 @@
     }
   </script>
 
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+
   <style>
+    :root {
+      --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+      --anim-duration: 1s;
+    }
+
     body {
       background-color: #ffffff;
       color: #334155;
       overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark body {
+      background-color: #0f172a;
+      color: #cbd5e1;
     }
 
     #header-canvas {
@@ -63,11 +81,20 @@
       backdrop-filter: blur(12px) saturate(120%);
       -webkit-backdrop-filter: blur(12px) saturate(120%);
       border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.05),
-        0 2px 4px -1px rgba(0, 0, 0, 0.03),
-        inset 0 0 20px rgba(255, 255, 255, 0.5);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03), inset 0 0 20px rgba(255, 255, 255, 0.5);
+      transition: all 0.4s var(--ease-smooth);
+    }
+
+    .dark .liquid-glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark .liquid-glass-card:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(255, 193, 14, 0.5);
+      box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.5);
     }
 
     .liquid-glass-card::before {
@@ -77,22 +104,21 @@
       left: -150%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg,
-          transparent,
-          rgba(255, 255, 255, 0.6),
-          transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
       transform: skewX(-25deg);
       transition: left 0.7s ease-in-out;
       pointer-events: none;
       z-index: 2;
     }
 
+    .dark .liquid-glass-card::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+
     .liquid-glass-card:hover {
       transform: translateY(-8px);
       border-color: rgba(255, 193, 14, 0.5);
-      box-shadow:
-        0 20px 30px -5px rgba(0, 108, 165, 0.15),
-        inset 0 0 30px rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 30px -5px rgba(0, 108, 165, 0.15), inset 0 0 30px rgba(255, 255, 255, 0.9);
       background: rgba(255, 255, 255, 0.85);
     }
 
@@ -113,7 +139,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.6s var(--ease-smooth);
     }
 
     .liquid-glass-card:hover .card-img-container img {
@@ -126,86 +152,118 @@
       padding: 1.5rem;
       border-radius: 0.75rem;
       border-left: 4px solid #FFC20E;
-      border-top: 1px solid rgba(255, 255, 255, 0.5);
-      border-right: 1px solid rgba(255, 255, 255, 0.5);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-      transition: all 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-left: 4px solid #FFC20E;
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .dark .value-item {
+      background: rgba(30, 41, 59, 0.6);
+      border-color: rgba(255, 255, 255, 0.1);
+      border-left-color: #FFC20E;
     }
 
     .value-item:hover {
       background: white;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      transform: translateY(-3px);
+      transform: translateY(-3px) scale(1.02);
     }
 
-    iframe {
-      filter: none !important;
+    .dark .value-item:hover {
+      background: #1e293b;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .reveal-on-scroll {
+      opacity: 0;
+      transition: all var(--anim-duration) var(--ease-smooth);
+      will-change: transform, opacity;
     }
 
-    @keyframes fadeInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .reveal-up {
+      transform: translateY(50px);
     }
 
-    @keyframes fadeInRight {
-      from {
-        opacity: 0;
-        transform: translateX(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .reveal-down {
+      transform: translateY(-50px);
     }
 
-    @keyframes pulse {
-      0% {
+    .reveal-left {
+      transform: translateX(-50px);
+    }
+
+    .reveal-right {
+      transform: translateX(50px);
+    }
+
+    .reveal-scale {
+      transform: scale(0.8);
+    }
+
+    .is-visible {
+      opacity: 1;
+      transform: translate(0) scale(1);
+    }
+
+    .delay-100 {
+      transition-delay: 0.1s;
+    }
+
+    .delay-200 {
+      transition-delay: 0.2s;
+    }
+
+    .delay-300 {
+      transition-delay: 0.3s;
+    }
+
+    .delay-400 {
+      transition-delay: 0.4s;
+    }
+
+    .delay-500 {
+      transition-delay: 0.5s;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
         transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 194, 14, 0.4);
       }
 
       50% {
         transform: scale(1.05);
+        box-shadow: 0 0 20px 0 rgba(255, 194, 14, 0.7);
       }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .animate-fade-in-up {
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
-
-    .animate-fade-in-left {
-      animation: fadeInLeft 0.8s ease-out forwards;
-    }
-
-    .animate-fade-in-right {
-      animation: fadeInRight 0.8s ease-out forwards;
     }
 
     .animate-pulse-custom {
-      animation: pulse 2s infinite;
+      animation: pulse-glow 2.5s infinite var(--ease-smooth);
+    }
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-text {
+      background: linear-gradient(45deg, #006CA5, #004C74, #FFC20E, #D4A000);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 8s ease infinite;
     }
 
     #back-to-top {
@@ -231,6 +289,7 @@
     #back-to-top.show {
       opacity: 1;
       visibility: visible;
+      transform: translateY(0);
     }
 
     #back-to-top:hover {
@@ -246,54 +305,12 @@
       background: linear-gradient(to right, #FFC20E, #006CA5);
       width: 0%;
       z-index: 1001;
-      transition: width 0.3s ease;
-    }
-
-    .sticky-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .gradient-text {
-      background: linear-gradient(45deg, #006CA5, #004C74, #FFC20E, #D4A000);
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradient 10s ease infinite;
-    }
-
-    @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    .section-hidden {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease;
-    }
-
-    .section-visible {
-      opacity: 1;
-      transform: translateY(0);
+      transition: width 0.1s linear;
     }
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen dark:bg-slate-900 transition-colors duration-300">
 
   <div id="reading-progress"></div>
 
@@ -301,16 +318,16 @@
     <i class="fa-solid fa-chevron-up"></i>
   </div>
 
-  <header class="relative bg-brand-blue text-white shadow-lg">
+  <header class="relative bg-brand-blue text-white shadow-lg dark:bg-slate-900 dark:border-b dark:border-white/10 transition-colors duration-300">
     <canvas id="header-canvas"></canvas>
 
     <div class="container mx-auto px-6 py-4 relative z-10">
       <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
-        <div class="flex items-center">
+        <div class="flex items-center reveal-on-scroll reveal-down">
           <img src="image/NEXTI-logo.png" alt="NExTI Logo" class="h-16 md:h-20 w-auto object-contain bg-white/10 rounded-lg p-2 backdrop-blur-sm">
         </div>
 
-        <nav class="hidden md:flex space-x-8 text-sm font-medium">
+        <nav class="hidden md:flex space-x-8 text-sm font-medium reveal-on-scroll reveal-down delay-100">
           <a href="#home" class="hover:text-brand-yellow transition-colors duration-300 uppercase tracking-wide">Início</a>
           <a href="#sobre" class="hover:text-brand-yellow transition-colors duration-300 uppercase tracking-wide">Sobre</a>
           <a href="#objetivos" class="hover:text-brand-yellow transition-colors duration-300 uppercase tracking-wide">Objetivos</a>
@@ -319,7 +336,7 @@
           <a href="#time" class="hover:text-brand-yellow transition-colors duration-300 uppercase tracking-wide">Time</a>
         </nav>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 reveal-on-scroll reveal-down delay-200">
           <a href="https://unifapce.edu.br" title="Portal" class="w-10 h-10 rounded-full bg-white/20 hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all duration-300 border border-white/30">
             <i class="fa-solid fa-graduation-cap text-lg"></i>
           </a>
@@ -328,24 +345,28 @@
           <a href="https://www.youtube.com/user/FaculdadeParaiso" class="text-white hover:text-brand-yellow transition-colors duration-300"><i class="fa-brands fa-youtube text-xl"></i></a>
           <a href="https://www.facebook.com/unifapce" class="text-white hover:text-brand-yellow transition-colors duration-300"><i class="fa-brands fa-facebook-f text-xl"></i></a>
           <a href="https://www.instagram.com/nextiunifap" class="text-white hover:text-brand-yellow transition-colors duration-300"><i class="fa-brands fa-instagram text-xl"></i></a>
+
+          <button id="theme-toggle" class="w-10 h-10 rounded-full bg-white/20 hover:bg-brand-yellow hover:text-brand-blue flex items-center justify-center transition-all duration-300 border border-white/30 ml-2" title="Alternar Tema">
+            <i class="fa-solid fa-moon text-lg"></i>
+          </button>
         </div>
       </div>
     </div>
   </header>
 
-  <section id="home" class="py-20 lg:py-32 bg-white relative overflow-hidden">
-    <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-gray -skew-x-12 opacity-70 z-0"></div>
+  <section id="home" class="py-20 lg:py-32 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-gray dark:bg-slate-800 -skew-x-12 opacity-70 z-0 transition-colors duration-300"></div>
 
     <div class="container mx-auto px-6 relative z-10">
       <div class="flex flex-col lg:flex-row items-center gap-16">
-        <div class="lg:w-1/2 space-y-6 animate-fade-in-left">
-          <span class="inline-block py-1 px-4 rounded-full bg-blue-50 text-brand-blue text-xs font-bold tracking-wider border border-brand-blue/20">INOVAÇÃO & EDUCAÇÃO</span>
+        <div class="lg:w-1/2 space-y-6 reveal-on-scroll reveal-left">
+          <span class="inline-block py-1 px-4 rounded-full bg-blue-50 dark:bg-slate-800 text-brand-blue dark:text-brand-yellow text-xs font-bold tracking-wider border border-brand-blue/20 dark:border-brand-yellow/20">INOVAÇÃO & EDUCAÇÃO</span>
 
-          <h1 class="font-display text-5xl lg:text-7xl font-extrabold text-slate-900 leading-tight">
+          <h1 class="font-display text-5xl lg:text-7xl font-extrabold text-slate-900 dark:text-white leading-tight">
             Núcleo de Extensão em <br><span class="gradient-text">Tecnologia da Informação</span>
           </h1>
 
-          <p class="text-lg text-gray-600 font-light leading-relaxed max-w-xl">
+          <p class="text-lg text-gray-600 dark:text-gray-300 font-light leading-relaxed max-w-xl">
             Transformando alunos em profissionais excepcionais através de desafios reais e inovação constante.
           </p>
 
@@ -353,16 +374,16 @@
             <a href="#projetos" class="px-8 py-4 rounded-lg bg-brand-yellow text-brand-blue font-bold shadow-lg hover:bg-brand-gold hover:text-white transition-all duration-300 transform hover:-translate-y-1 animate-pulse-custom">
               Ver Projetos
             </a>
-            <a href="#sobre" class="px-8 py-4 rounded-lg border-2 border-brand-blue text-brand-blue font-bold hover:bg-brand-blue hover:text-white transition-all duration-300">
+            <a href="#sobre" class="px-8 py-4 rounded-lg border-2 border-brand-blue dark:border-white text-brand-blue dark:text-white font-bold hover:bg-brand-blue dark:hover:bg-white hover:text-white dark:hover:text-brand-blue transition-all duration-300">
               Saiba Mais
             </a>
           </div>
         </div>
 
-        <div class="lg:w-1/2 animate-fade-in-right">
+        <div class="lg:w-1/2 reveal-on-scroll reveal-scale delay-200">
           <div class="relative">
             <div class="absolute -inset-4 bg-brand-yellow rounded-full blur-3xl opacity-20"></div>
-            <img src="image/nextialunos-3SZUrtlU.jpg" class="relative rounded-2xl shadow-2xl border-4 border-white rotate-2 hover:rotate-0 transition-all duration-500 w-full object-cover">
+            <img src="image/nextialunos-3SZUrtlU.jpg" class="relative rounded-2xl shadow-2xl border-4 border-white dark:border-slate-700 rotate-2 hover:rotate-0 transition-all duration-700 w-full object-cover">
           </div>
         </div>
       </div>
@@ -373,66 +394,66 @@
     </div>
   </section>
 
-  <section id="sobre" class="py-24 bg-brand-gray relative overflow-hidden">
-    <div class="absolute top-20 left-[-10%] w-96 h-96 bg-blue-200 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
-    <div class="absolute bottom-20 right-[-10%] w-96 h-96 bg-yellow-200 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
+  <section id="sobre" class="py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+    <div class="absolute top-20 left-[-10%] w-96 h-96 bg-blue-200 dark:bg-blue-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
+    <div class="absolute bottom-20 right-[-10%] w-96 h-96 bg-yellow-200 dark:bg-yellow-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
 
     <div class="container mx-auto px-6 relative z-10">
-      <div class="text-center mb-16">
-        <h2 class="font-display text-4xl font-bold text-slate-900 mb-2">Sobre o <span class="text-brand-blue">NExTI</span></h2>
+      <div class="text-center mb-16 reveal-on-scroll reveal-up">
+        <h2 class="font-display text-4xl font-bold text-slate-900 dark:text-white mb-2">Sobre o <span class="text-brand-blue">NExTI</span></h2>
         <div class="h-1.5 w-24 bg-brand-yellow mx-auto rounded-full"></div>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
         <div class="space-y-6">
-          <div class="value-item shadow-lg border-l-4 border-brand-yellow animate-fade-in-up" style="animation-delay: 0.1s;">
+          <div class="value-item shadow-lg border-l-4 border-brand-yellow reveal-on-scroll reveal-left delay-100">
             <div class="flex items-center gap-3 mb-3">
               <i class="fa-solid fa-rocket text-2xl text-brand-yellow"></i>
-              <h3 class="text-2xl font-bold text-slate-800">Missão</h3>
+              <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Missão</h3>
             </div>
-            <p class="text-gray-600 text-justify">Capacitar nossos estudantes para se tornarem profissionais excepcionais em tecnologia da informação, prontos para enfrentar desafios complexos e contribuir para a inovação na sociedade.</p>
+            <p class="text-gray-600 dark:text-gray-300 text-justify">Capacitar nossos estudantes para se tornarem profissionais excepcionais em tecnologia da informação, prontos para enfrentar desafios complexos e contribuir para a inovação na sociedade.</p>
           </div>
-          <div class="value-item shadow-lg border-l-4 border-brand-blue animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="value-item shadow-lg border-l-4 border-brand-blue reveal-on-scroll reveal-left delay-200">
             <div class="flex items-center gap-3 mb-3">
               <i class="fa-solid fa-eye text-2xl text-brand-blue"></i>
-              <h3 class="text-2xl font-bold text-slate-800">Visão</h3>
+              <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Visão</h3>
             </div>
-            <p class="text-gray-600 text-justify">Almejamos ser reconhecidos como líderes na formação de profissionais em tecnologia da informação, tanto em nossa instituição como em âmbito local e regional.</p>
+            <p class="text-gray-600 dark:text-gray-300 text-justify">Almejamos ser reconhecidos como líderes na formação de profissionais em tecnologia da informação, tanto em nossa instituição como em âmbito local e regional.</p>
           </div>
         </div>
 
         <div>
-          <h3 class="text-2xl font-bold text-slate-900 mb-8 text-center lg:text-left">Nossos <span class="text-brand-yellow">Valores</span></h3>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 text-center lg:text-left reveal-on-scroll reveal-right">Nossos <span class="text-brand-yellow">Valores</span></h3>
           <div class="grid sm:grid-cols-2 gap-4">
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-100">
               <i class="fa-solid fa-book-open text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Aprendizado</h4>
-              <p class="text-xs text-gray-500">Busca constante pelo conhecimento.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Aprendizado</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Busca constante pelo conhecimento.</p>
             </div>
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-200">
               <i class="fa-solid fa-lightbulb text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Inovação</h4>
-              <p class="text-xs text-gray-500">Criatividade e soluções inovadoras.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Inovação</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Criatividade e soluções inovadoras.</p>
             </div>
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.5s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-300">
               <i class="fa-solid fa-scale-balanced text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Ética</h4>
-              <p class="text-xs text-gray-500">Integridade e responsabilidade.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Ética</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Integridade e responsabilidade.</p>
             </div>
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.6s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-400">
               <i class="fa-solid fa-users text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Equipe</h4>
-              <p class="text-xs text-gray-500">Importância da colaboração.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Equipe</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Importância da colaboração.</p>
             </div>
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.7s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-500">
               <i class="fa-solid fa-briefcase text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Empreendedorismo</h4>
-              <p class="text-xs text-gray-500">Mentalidade empresarial.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Empreendedorismo</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Mentalidade empresarial.</p>
             </div>
-            <div class="value-item animate-fade-in-up" style="animation-delay: 0.8s;">
+            <div class="value-item reveal-on-scroll reveal-up delay-500">
               <i class="fa-solid fa-hand-holding-heart text-brand-blue mb-2 text-xl"></i>
-              <h4 class="font-bold text-slate-800">Comunidade</h4>
-              <p class="text-xs text-gray-500">Contribuição social.</p>
+              <h4 class="font-bold text-slate-800 dark:text-white">Comunidade</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Contribuição social.</p>
             </div>
           </div>
         </div>
@@ -440,52 +461,52 @@
     </div>
   </section>
 
-  <section id="objetivos" class="py-24 bg-white relative">
+  <section id="objetivos" class="py-24 bg-white dark:bg-slate-900 relative transition-colors duration-300">
     <div class="container mx-auto px-6">
       <div class="grid lg:grid-cols-2 gap-16">
         <div>
-          <h3 class="text-3xl font-bold text-slate-900 mb-8">Objetivos <span class="text-brand-yellow">Institucionais</span></h3>
+          <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-8 reveal-on-scroll reveal-left">Objetivos <span class="text-brand-yellow">Institucionais</span></h3>
           <div class="space-y-6">
-            <div class="flex gap-4 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <div class="flex gap-4 reveal-on-scroll reveal-left delay-100">
               <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold">1</div>
               <div>
-                <h4 class="font-bold text-slate-800">Experiência Prática</h4>
-                <p class="text-sm text-gray-600">Aplicar conhecimento teórico em situações práticas.</p>
+                <h4 class="font-bold text-slate-800 dark:text-white">Experiência Prática</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Aplicar conhecimento teórico em situações práticas.</p>
               </div>
             </div>
-            <div class="flex gap-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+            <div class="flex gap-4 reveal-on-scroll reveal-left delay-200">
               <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold">2</div>
               <div>
-                <h4 class="font-bold text-slate-800">Integração com o Mercado</h4>
-                <p class="text-sm text-gray-600">Parcerias estratégicas com empresas locais.</p>
+                <h4 class="font-bold text-slate-800 dark:text-white">Integração com o Mercado</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Parcerias estratégicas com empresas locais.</p>
               </div>
             </div>
-            <div class="flex gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="flex gap-4 reveal-on-scroll reveal-left delay-300">
               <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold">3</div>
               <div>
-                <h4 class="font-bold text-slate-800">Aprimoramento Profissional</h4>
-                <p class="text-sm text-gray-600">Desenvolvimento de hard skills e soft skills.</p>
+                <h4 class="font-bold text-slate-800 dark:text-white">Aprimoramento Profissional</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Desenvolvimento de hard skills e soft skills.</p>
               </div>
             </div>
-            <div class="flex gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="flex gap-4 reveal-on-scroll reveal-left delay-400">
               <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold">4</div>
               <div>
-                <h4 class="font-bold text-slate-800">Inovação e Pesquisa</h4>
-                <p class="text-sm text-gray-600">Estimular pesquisa e desenvolvimento.</p>
+                <h4 class="font-bold text-slate-800 dark:text-white">Inovação e Pesquisa</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Estimular pesquisa e desenvolvimento.</p>
               </div>
             </div>
-            <div class="flex gap-4 animate-fade-in-up" style="animation-delay: 0.5s;">
+            <div class="flex gap-4 reveal-on-scroll reveal-left delay-500">
               <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold">5</div>
               <div>
-                <h4 class="font-bold text-slate-800">Serviço à Comunidade</h4>
-                <p class="text-sm text-gray-600">Soluções tecnológicas que beneficiem a comunidade.</p>
+                <h4 class="font-bold text-slate-800 dark:text-white">Serviço à Comunidade</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Soluções tecnológicas que beneficiem a comunidade.</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="space-y-12">
-          <div class="rounded-2xl overflow-hidden shadow-xl group relative animate-fade-in-up" style="animation-delay: 0.6s;">
+          <div class="rounded-2xl overflow-hidden shadow-xl group relative reveal-on-scroll reveal-right delay-200">
             <img src="image/nexti-BKIt4bnr.jpg" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent">
               <p class="text-white font-bold text-xl">Cultura Maker</p>
@@ -493,14 +514,11 @@
             </div>
           </div>
 
-          <div class="bg-brand-gray p-8 rounded-2xl text-center border border-gray-200 animate-fade-in-up" style="animation-delay: 0.7s;">
+          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300">
             <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8">Nossos Parceiros</h4>
             <div class="flex flex-wrap justify-center items-center gap-12">
-
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110">
-
-              <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110">
-
+              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110 dark:invert-[0.1]">
+              <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110 dark:invert-[0.1]">
             </div>
           </div>
         </div>
@@ -508,119 +526,118 @@
     </div>
   </section>
 
-  <section id="projetos" class="py-24 bg-brand-gray relative overflow-hidden">
-    <div class="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-blue-100 rounded-full filter blur-[150px] opacity-40 pointer-events-none"></div>
+  <section id="projetos" class="py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+    <div class="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-blue-100 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-40 pointer-events-none"></div>
 
     <div class="container mx-auto px-6 relative z-10">
-      <div class="text-center mb-16">
-        <h2 class="font-display text-4xl font-bold text-slate-900 mb-2">Nossos <span class="text-brand-blue">Projetos</span></h2>
-        <p class="text-gray-500">Soluções reais desenvolvidas pelos nossos talentos.</p>
+      <div class="text-center mb-16 reveal-on-scroll reveal-up">
+        <h2 class="font-display text-4xl font-bold text-slate-900 dark:text-white mb-2">Nossos <span class="text-brand-blue">Projetos</span></h2>
+        <p class="text-gray-500 dark:text-gray-400">Soluções reais desenvolvidas pelos nossos talentos.</p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/Ponto.png" alt="Ponto Eletrônico">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Ponto Eletrônico</h3>
-            <p class="text-sm text-gray-600 flex-1">O Ponto Eletrônico consiste em um ambiente virtual em que os alunos possam registrar seu ponto de entrada e saída.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Ponto Eletrônico</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">O Ponto Eletrônico consiste em um ambiente virtual em que os alunos possam registrar seu ponto de entrada e saída.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/PEstagio.png" alt="Plataforma de Estágio">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Plataforma de Estágio</h3>
-            <p class="text-sm text-gray-600 flex-1">A Plataforma de estágio consiste em ajudar pessoas a começar no mercado de trabalho.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Plataforma de Estágio</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">A Plataforma de estágio consiste em ajudar pessoas a começar no mercado de trabalho.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.3s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/BancoT.png" alt="Banco de Talentos">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Banco de Talentos</h3>
-            <p class="text-sm text-gray-600 flex-1">O banco de talentos consiste em ajudar pessoas a aprimorar seus pontos fortes ou mesmo a descobri-los.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Banco de Talentos</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">O banco de talentos consiste em ajudar pessoas a aprimorar seus pontos fortes ou mesmo a descobri-los.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.4s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/npj.jpg" alt="Acompanhamento NPJ">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
-            <p class="text-sm text-gray-600 flex-1">Sistema que facilita o acompanhamento dos processos do NPJ, oferecendo ao professor mais controle e organização sobre cada caso.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que facilita o acompanhamento dos processos do NPJ, oferecendo ao professor mais controle e organização sobre cada caso.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.5s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/doacao.jpg" alt="Sistema de Doação">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Sistema de Doação</h3>
-            <p class="text-sm text-gray-600 flex-1">Sistema para instituições filantrópicas cadastrarem doadores e vincular doações à conta de energia.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema de Doação</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para instituições filantrópicas cadastrarem doadores e vincular doações à conta de energia.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.6s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/web.jpg" alt="Vocabulário Web">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Vocabulário Web</h3>
-            <p class="text-sm text-gray-600 flex-1">Um sistema de dicionário web que facilita o aprendizado de palavras em inglês de forma gameficada.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Vocabulário Web</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Um sistema de dicionário web que facilita o aprendizado de palavras em inglês de forma gameficada.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.7s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/declara-o.jpg" alt="Gerador de Declarações">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Gerador de Declarações</h3>
-            <p class="text-sm text-gray-600 flex-1">Sistema que gera declarações e relatórios personalizados com base em informações como nome, data, atividade e período.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Gerador de Declarações</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que gera declarações e relatórios personalizados com base em informações como nome, data, atividade e período.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.8s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/empreendedorismo.jpg" alt="Sistema Empreendedorismo">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Sistema Empreendedorismo</h3>
-            <p class="text-sm text-gray-600 flex-1">Sistema para o administrador gerenciar conteúdos sobre empreendedorismo, como artigos, imagens e entrevistas.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema Empreendedorismo</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para o administrador gerenciar conteúdos sobre empreendedorismo, como artigos, imagens e entrevistas.</p>
           </div>
         </div>
 
-        <div class="liquid-glass-card group animate-fade-in-up" style="animation-delay: 0.9s;">
+        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
           <div class="card-img-container">
             <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
             <img src="image/orcamento-servico.jpg" alt="Orçamento Serviço">
           </div>
           <div class="p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">Orçamento Serviço de Segurança</h3>
-            <p class="text-sm text-gray-600 flex-1">Sistema mobile para gerenciamento de vendas de produtos vendidos e serviços.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Orçamento Serviço de Segurança</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema mobile para gerenciamento de vendas de produtos vendidos e serviços.</p>
           </div>
         </div>
 
       </div>
 
-      <div class="text-center mt-12 animate-fade-in-up" style="animation-delay: 1s;">
+      <div class="text-center mt-12 reveal-on-scroll reveal-up delay-400">
         <a href="projetos.html" class="inline-block px-8 py-4 rounded-lg bg-brand-blue text-white font-bold shadow-lg hover:bg-brand-darkblue hover:text-white transition-all duration-300 transform hover:-translate-y-1">
           Ver Mais
           <i class="fa-solid fa-arrow-right ml-2"></i>
@@ -629,29 +646,29 @@
     </div>
   </section>
 
-  <section id="eventos" class="py-24 bg-white">
+  <section id="eventos" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
     <div class="container mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="font-display text-4xl font-bold text-slate-900 mb-2">Eventos & <span class="text-brand-yellow">Editais</span></h2>
+      <div class="text-center mb-16 reveal-on-scroll reveal-up">
+        <h2 class="font-display text-4xl font-bold text-slate-900 dark:text-white mb-2">Eventos & <span class="text-brand-yellow">Editais</span></h2>
       </div>
       <div class="grid md:grid-cols-2 gap-12">
 
-        <div class="liquid-glass-card p-8 flex flex-col lg:flex-row gap-8 items-center hover:shadow-xl transition-all animate-fade-in-left">
+        <div class="liquid-glass-card p-8 flex flex-col lg:flex-row gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-left delay-100">
           <img src="image/imagem-edital-nexti.png" class="w-full lg:w-48 rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
           <div class="text-center lg:text-left relative z-10">
-            <h3 class="text-2xl font-bold text-slate-900 mb-1">NExTI Edital 2025.1</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">NExTI Edital 2025.1</h3>
             <p class="text-brand-blue font-bold text-sm uppercase mb-4">Seleção de Estágio</p>
-            <p class="text-gray-600 text-sm mb-6 text-justify">Seleção de colaboradores para o NExTI. Vagas com bolsa auxílio.</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-6 text-justify">Seleção de colaboradores para o NExTI. Vagas com bolsa auxílio.</p>
             <button class="px-6 py-2 rounded-full bg-brand-blue text-white font-bold hover:bg-brand-darkblue transition-colors">Ver Edital Completo</button>
           </div>
         </div>
 
-        <div class="liquid-glass-card p-8 flex flex-col lg:flex-row gap-8 items-center hover:shadow-xl transition-all animate-fade-in-right">
+        <div class="liquid-glass-card p-8 flex flex-col lg:flex-row gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-right delay-200">
           <img src="image/postNExTIAcce-Cj7p2tym.png" class="w-full lg:w-48 rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
           <div class="text-center lg:text-left relative z-10">
-            <h3 class="text-2xl font-bold text-slate-900 mb-1">Acceleration Startups</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Acceleration Startups</h3>
             <p class="text-brand-yellow font-bold text-sm uppercase mb-4">Programa Gratuito</p>
-            <p class="text-gray-600 text-sm mb-6 text-justify">Capacitação para alunos com ideias inovadoras.</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-6 text-justify">Capacitação para alunos com ideias inovadoras.</p>
             <button class="px-6 py-2 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white transition-colors">Inscrever-se Agora</button>
           </div>
         </div>
@@ -660,44 +677,50 @@
     </div>
   </section>
 
-  <section id="time" class="py-24 bg-brand-gray relative overflow-hidden">
-    <div class="absolute bottom-0 left-1/3 w-[600px] h-[600px] bg-blue-50 rounded-full filter blur-[150px] opacity-50 pointer-events-none"></div>
+  <section id="time" class="py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+    <div class="absolute bottom-0 left-1/3 w-[600px] h-[600px] bg-blue-50 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-50 pointer-events-none"></div>
 
     <div class="container mx-auto px-6 relative z-10">
-      <div class="text-center mb-16">
-        <h2 class="font-display text-4xl font-bold text-slate-900 mb-2">Nosso <span class="text-brand-blue">Time</span></h2>
-        <p class="text-gray-500">Liderança e Coordenação</p>
+      <div class="text-center mb-16 reveal-on-scroll reveal-up">
+        <h2 class="font-display text-4xl font-bold text-slate-900 dark:text-white mb-2">Nosso <span class="text-brand-blue">Time</span></h2>
+        <p class="text-gray-500 dark:text-gray-400">Liderança e Coordenação</p>
       </div>
 
       <div class="flex flex-wrap justify-center gap-20">
-        <div class="group text-center animate-fade-in-up" style="animation-delay: 0.2s;">
-          <div class="w-64 h-64 mx-auto rounded-full overflow-hidden border-8 border-white shadow-2xl mb-6 relative">
+        <div class="group text-center reveal-on-scroll reveal-scale delay-100">
+          <div class="w-64 h-64 mx-auto rounded-full overflow-hidden border-8 border-white dark:border-slate-700 shadow-2xl mb-6 relative">
             <div class="absolute inset-0 bg-brand-yellow opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
             <img src="image/fabricio-CLG1CeQt.jpg" alt="Fabrício Carneiro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
           </div>
-          <h3 class="text-2xl font-bold text-slate-900">Fabrício Carneiro</h3>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Fabrício Carneiro</h3>
           <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-sm">Coordenador</p>
           <div class="flex justify-center gap-4 mt-3">
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-xl"></i></a>
+            <a href="https://www.linkedin.com/in/fabricio-carneiro-42775632" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-xl"></i></a>
+            <a href="" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-xl"></i></a>
           </div>
         </div>
 
-        <div class="group text-center animate-fade-in-up" style="animation-delay: 0.4s;">
-          <div class="w-64 h-64 mx-auto rounded-full overflow-hidden border-8 border-white shadow-2xl mb-6 relative">
+        <div class="group text-center reveal-on-scroll reveal-scale delay-300">
+          <div class="w-64 h-64 mx-auto rounded-full overflow-hidden border-8 border-white dark:border-slate-700 shadow-2xl mb-6 relative">
             <div class="absolute inset-0 bg-brand-blue opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
             <img src="image/francisco-DwrxvW5U.jpg" alt="Francisco Rodrigues" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
           </div>
-          <h3 class="text-2xl font-bold text-slate-900">Francisco Rodrigues</h3>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Francisco Rodrigues</h3>
           <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-sm">Professor</p>
           <div class="flex justify-center gap-4 mt-3">
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-xl"></i></a>
+            <a href="https://www.linkedin.com/in/rodriguesfas" class="text-gray-400 hover:text-brand-blue">
+              <i class="fa-brands fa-linkedin text-xl"></i>
+            </a>
+
+            <a href="mailto:franciscosouzaacer@gmail.com" class="text-gray-400 hover:text-brand-blue">
+              <i class="fa-solid fa-envelope text-xl"></i>
+            </a>
           </div>
+
         </div>
       </div>
 
-      <div class="text-center mt-16">
+      <div class="text-center mt-16 reveal-on-scroll reveal-up delay-400">
         <a href="equipe.html" class="inline-block px-10 py-3 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white hover:scale-105 transition-all shadow-lg animate-pulse-custom">
           Ver Todos
         </a>
@@ -705,7 +728,7 @@
     </div>
   </section>
 
-  <footer id="contato" class="bg-brand-blue text-white pt-16 pb-8">
+  <footer id="contato" class="bg-brand-blue dark:bg-slate-900 text-white pt-16 pb-8 transition-colors duration-300">
     <div class="container mx-auto px-6">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
 
@@ -751,6 +774,51 @@
   </footer>
 
   <script>
+    // Lógica do Modo Dark
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    const html = document.documentElement;
+
+    function updateIcon() {
+      if (html.classList.contains('dark')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+
+    updateIcon();
+
+    themeToggleBtn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+
+      if (html.classList.contains('dark')) {
+        localStorage.theme = 'dark';
+      } else {
+        localStorage.theme = 'light';
+      }
+      updateIcon();
+    });
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
 
     const canvas = document.getElementById('header-canvas');
     const ctx = canvas.getContext('2d');
@@ -863,8 +931,8 @@
       let opacityValue = 1;
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
 
           if (distance < (canvas.width / 7) * (canvas.height / 7)) {
             opacityValue = 1 - (distance / 20000);
@@ -902,40 +970,6 @@
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
-      });
-    });
-
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('section-visible');
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('section').forEach(section => {
-      section.classList.add('section-hidden');
-      observer.observe(section);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
       });
     });
   </script>
