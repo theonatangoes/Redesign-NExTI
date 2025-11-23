@@ -35,19 +35,15 @@
   </script>
 
   <script>
-    // Verifica apenas se existe a preferência 'dark' salva explicitamente.
-    // Se não existir, ou se for 'light', ele não adiciona a classe (ficando claro).
     if (localStorage.theme === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')
-      // Removemos a verificação de sistema (window.matchMedia) para forçar o light
     }
   </script>
 
   <style>
     :root {
-      /* Curva de animação ultra-suave */
       --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
       --anim-duration: 1s;
     }
@@ -74,7 +70,6 @@
       pointer-events: none;
     }
 
-    /* --- CARDS --- */
     .liquid-glass-card {
       height: 100%;
       display: flex;
@@ -179,16 +174,12 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     }
 
-    /* --- NOVAS ANIMAÇÕES DE SCROLL --- */
-
-    /* Classe base para elementos que vão animar */
     .reveal-on-scroll {
       opacity: 0;
       transition: all var(--anim-duration) var(--ease-smooth);
       will-change: transform, opacity;
     }
 
-    /* Variantes de posição inicial */
     .reveal-up {
       transform: translateY(50px);
     }
@@ -209,13 +200,11 @@
       transform: scale(0.8);
     }
 
-    /* Classe aplicada via JS quando entra na tela */
     .is-visible {
       opacity: 1;
       transform: translate(0) scale(1);
     }
 
-    /* Delay em cascata para grids */
     .delay-100 {
       transition-delay: 0.1s;
     }
@@ -236,8 +225,6 @@
       transition-delay: 0.5s;
     }
 
-
-    /* --- ANIMAÇÕES CONTÍNUAS (PULSE, ETC) --- */
     @keyframes pulse-glow {
 
       0%,
@@ -781,12 +768,11 @@
   </footer>
 
   <script>
-    // Lógica do Modo Dark
+
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeIcon = themeToggleBtn.querySelector('i');
     const html = document.documentElement;
 
-    // Atualiza o ícone com base no estado atual
     function updateIcon() {
       if (html.classList.contains('dark')) {
         themeIcon.classList.remove('fa-moon');
@@ -797,10 +783,8 @@
       }
     }
 
-    // Executa na carga da página
     updateIcon();
 
-    // Evento de clique
     themeToggleBtn.addEventListener('click', () => {
       html.classList.toggle('dark');
 
@@ -812,8 +796,6 @@
       updateIcon();
     });
 
-
-    // Scripts originais do site
     const canvas = document.getElementById('header-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
