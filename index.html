@@ -160,7 +160,6 @@
       backdrop-filter: blur(8px);
       padding: 1.5rem;
       border-radius: 0.75rem;
-      border-left: 4px solid #FFC20E;
       border: 1px solid rgba(255, 255, 255, 0.5);
       border-left: 4px solid #FFC20E;
       transition: all 0.3s var(--ease-smooth);
@@ -299,74 +298,102 @@
       transition: width 0.1s linear;
     }
 
-    .marquee-wrapper {
-      display: flex;
+    .logos-slider-container {
+      width: 100%;
+      max-width: 100%;
       overflow: hidden;
-      user-select: none;
       position: relative;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      padding: 20px 0;
     }
 
-    .marquee-group {
-      flex-shrink: 0;
+    .logos-slider {
+      display: flex;
+      width: max-content;
+      animation: logo-scroll 40s linear infinite;
+      will-change: transform;
+    }
+
+    .logos-slider-container:hover .logos-slider {
+      animation-play-state: paused;
+    }
+
+    .logos-slide {
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      gap: 5rem;
+      padding-right: 5rem;
     }
 
-    .marquee-wrapper {
-      flex-direction: column;
-      height: 400px;
-      mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    .partner-logo-img {
+      height: 80px;
+      width: auto;
+      object-fit: contain;
+      filter: grayscale(100%) opacity(0.6);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      -webkit-user-drag: none;
+      user-select: none;
     }
 
-    .marquee-group {
-      flex-direction: column;
-      min-height: 100%;
-      gap: 4rem;
-      animation: scroll-y 30s linear infinite;
+    .partner-logo-img:hover {
+      filter: grayscale(0%) opacity(1);
+      transform: scale(1.15);
+      filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.1));
     }
 
-    @media (min-width: 768px) {
-      .marquee-wrapper {
-        flex-direction: row;
-        height: auto;
-        width: 100%;
-        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      }
-
-      .marquee-group {
-        flex-direction: row;
-        min-width: 100%;
-        min-height: auto;
-        gap: 6rem;
-        animation: scroll-x 40s linear infinite;
-      }
+    .dark .partner-logo-img {
+      filter: grayscale(100%) invert(0.1) opacity(0.5);
     }
 
-    @keyframes scroll-x {
-      from {
+    .dark .partner-logo-img:hover {
+      filter: grayscale(0%) invert(0) opacity(1);
+    }
+
+    @keyframes logo-scroll {
+      0% {
         transform: translateX(0);
       }
 
-      to {
-        transform: translateX(-100%);
+      100% {
+        transform: translateX(-50%);
       }
     }
 
-    @keyframes scroll-y {
-      from {
-        transform: translateY(0);
+    @media (max-width: 768px) {
+      .rounded-2xl img {
+        height: auto !important;
+        max-height: 300px;
+        object-fit: contain;
       }
 
-      to {
-        transform: translateY(-100%);
+      .logos-slider-container {
+        display: block;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+      }
+
+      .logos-slide {
+        gap: 2rem;
+        padding-right: 2rem;
+      }
+
+      .partner-logo-img {
+        height: 65px !important;
+        width: auto !important;
+      }
+
+      .logos-slider-vertical-container {
+        display: none !important;
       }
     }
 
-    .marquee-wrapper:hover .marquee-group {
-      animation-play-state: paused;
+    @media (min-width: 769px) {
+      .logos-slider-vertical-container {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -524,7 +551,7 @@
 
   <section id="objetivos" class="py-24 bg-white dark:bg-slate-900 relative transition-colors duration-300">
     <div class="container mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-16">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
         <div>
           <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-8 reveal-on-scroll reveal-left">Objetivos <span class="text-brand-yellow">Institucionais</span></h3>
           <div class="space-y-6">
@@ -575,32 +602,36 @@
             </div>
           </div>
 
-          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300 w-full relative group">
+          <div class="w-full max-w-full relative group md:bg-brand-gray md:dark:bg-slate-800 md:p-8 md:rounded-2xl md:border md:border-gray-200 md:dark:border-slate-700 reveal-on-scroll reveal-up delay-300">
 
-            <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8 relative z-10">Nossos Parceiros</h4>
+            <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8 relative z-10 text-center px-4 md:px-0">Nossos Parceiros</h4>
 
-            <div class="marquee-wrapper">
-
-              <div class="marquee-group">
-                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+            <div class="logos-slider-container">
+              <div class="logos-slider">
+                <div class="logos-slide">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                  <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                  <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                </div>
+                <div class="logos-slide">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                  <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                  <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                </div>
               </div>
+            </div>
 
-              <div class="marquee-group" aria-hidden="true">
-                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+            <div class="logos-slider-vertical-container">
+              <div class="logos-slider-vertical">
+                <div class="logos-slide-vertical">
+                </div>
               </div>
-
             </div>
 
           </div>
