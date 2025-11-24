@@ -31,21 +31,11 @@
           },
           animation: {
             'pulse-custom': 'pulse-glow 2.5s infinite cubic-bezier(0.23, 1, 0.32, 1)',
-            'marquee': 'marquee 9s linear infinite',
-            'marquee-vertical': 'marquee-vertical 30s linear infinite',
           },
           keyframes: {
             'pulse-glow': {
               '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 194, 14, 0.4)' },
               '50%': { transform: 'scale(1.05)', boxShadow: '0 0 20px 0 rgba(255, 194, 14, 0.7)' },
-            },
-            'marquee': {
-              '0%': { transform: 'translateX(0)' },
-              '100%': { transform: 'translateX(-50%)' },
-            },
-            'marquee-vertical': {
-              '0%': { transform: 'translateY(-50%)' },
-              '100%': { transform: 'translateY(0)' },
             }
           }
         }
@@ -308,6 +298,76 @@
       z-index: 1001;
       transition: width 0.1s linear;
     }
+
+    .marquee-wrapper {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      position: relative;
+    }
+
+    .marquee-group {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .marquee-wrapper {
+      flex-direction: column;
+      height: 400px;
+      mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    }
+
+    .marquee-group {
+      flex-direction: column;
+      min-height: 100%;
+      gap: 4rem;
+      animation: scroll-y 30s linear infinite;
+    }
+
+    @media (min-width: 768px) {
+      .marquee-wrapper {
+        flex-direction: row;
+        height: auto;
+        width: 100%;
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      }
+
+      .marquee-group {
+        flex-direction: row;
+        min-width: 100%;
+        min-height: auto;
+        gap: 6rem;
+        animation: scroll-x 40s linear infinite;
+      }
+    }
+
+    @keyframes scroll-x {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes scroll-y {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-100%);
+      }
+    }
+
+    .marquee-wrapper:hover .marquee-group {
+      animation-play-state: paused;
+    }
   </style>
 </head>
 
@@ -515,50 +575,34 @@
             </div>
           </div>
 
-          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300 w-full overflow-hidden relative group">
+          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300 w-full relative group">
 
             <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8 relative z-10">Nossos Parceiros</h4>
 
-            <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none hidden md:block"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none hidden md:block"></div>
-            <div class="absolute left-0 top-0 right-0 h-10 bg-gradient-to-b from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none md:hidden"></div>
-            <div class="absolute left-0 bottom-0 right-0 h-10 bg-gradient-to-t from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none md:hidden"></div>
+            <div class="marquee-wrapper">
 
+              <div class="marquee-group">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
 
-            <div class="relative overflow-hidden w-full h-[400px] md:h-auto">
-
-              <div class="flex flex-col md:flex-row animate-marquee-vertical md:animate-marquee items-center md:whitespace-nowrap">
-
-                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-24 shrink-0 pb-12 md:pb-0 md:pr-24">
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                </div>
-
-                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-24 shrink-0 pb-12 md:pb-0 md:pr-24">
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-
-                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
-                </div>
-
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
               </div>
+
+              <div class="marquee-group" aria-hidden="true">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+              </div>
+
             </div>
+
           </div>
         </div>
       </div>
