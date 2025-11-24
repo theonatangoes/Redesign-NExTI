@@ -28,6 +28,25 @@
               gold: '#D4A000',
               gray: '#f1f5f9',
             }
+          },
+          animation: {
+            'pulse-custom': 'pulse-glow 2.5s infinite cubic-bezier(0.23, 1, 0.32, 1)',
+            'marquee': 'marquee 9s linear infinite',
+            'marquee-vertical': 'marquee-vertical 30s linear infinite',
+          },
+          keyframes: {
+            'pulse-glow': {
+              '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 194, 14, 0.4)' },
+              '50%': { transform: 'scale(1.05)', boxShadow: '0 0 20px 0 rgba(255, 194, 14, 0.7)' },
+            },
+            'marquee': {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+            'marquee-vertical': {
+              '0%': { transform: 'translateY(-50%)' },
+              '100%': { transform: 'translateY(0)' },
+            }
           }
         }
       }
@@ -223,24 +242,6 @@
 
     .delay-500 {
       transition-delay: 0.5s;
-    }
-
-    @keyframes pulse-glow {
-
-      0%,
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 194, 14, 0.4);
-      }
-
-      50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px 0 rgba(255, 194, 14, 0.7);
-      }
-    }
-
-    .animate-pulse-custom {
-      animation: pulse-glow 2.5s infinite var(--ease-smooth);
     }
 
     @keyframes gradient {
@@ -506,19 +507,57 @@
         </div>
 
         <div class="space-y-12">
-          <div class="rounded-2xl overflow-hidden shadow-xl group relative reveal-on-scroll reveal-right delay-200">
-            <img src="image/nexti-BKIt4bnr.jpg" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="rounded-2xl overflow-hidden shadow-xl group relative reveal-on-scroll reveal-right delay-200 w-full">
+            <img src="image/nexti-BKIt4bnr.jpg" class="w-full h-64 md:h-80 lg:h-96 object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent">
               <p class="text-white font-bold text-xl">Cultura Maker</p>
               <p class="text-brand-yellow text-sm">Criatividade em cada peça</p>
             </div>
           </div>
 
-          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300">
-            <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8">Nossos Parceiros</h4>
-            <div class="flex flex-wrap justify-center items-center gap-12">
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110 dark:invert-[0.1]">
-              <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-700 ease-in-out opacity-70 hover:opacity-100 hover:scale-110 dark:invert-[0.1]">
+          <div class="bg-brand-gray dark:bg-slate-800 p-8 rounded-2xl text-center border border-gray-200 dark:border-slate-700 reveal-on-scroll reveal-up delay-300 w-full overflow-hidden relative group">
+
+            <h4 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8 relative z-10">Nossos Parceiros</h4>
+
+            <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none hidden md:block"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none hidden md:block"></div>
+            <div class="absolute left-0 top-0 right-0 h-10 bg-gradient-to-b from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none md:hidden"></div>
+            <div class="absolute left-0 bottom-0 right-0 h-10 bg-gradient-to-t from-brand-gray dark:from-slate-800 to-transparent z-10 pointer-events-none md:hidden"></div>
+
+
+            <div class="relative overflow-hidden w-full h-[400px] md:h-auto">
+
+              <div class="flex flex-col md:flex-row animate-marquee-vertical md:animate-marquee items-center md:whitespace-nowrap">
+
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-24 shrink-0 pb-12 md:pb-0 md:pr-24">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-24 shrink-0 pb-12 md:pb-0 md:pr-24">
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+
+                  <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="h-24 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/Brisanet.png" alt="Brisanet" class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                  <img src="image/unifap logo.png" alt="Unifap" class="h-32 w-32 object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-in-out opacity-60 hover:opacity-100 dark:invert-[0.1]">
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -768,7 +807,6 @@
   </footer>
 
   <script>
-
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeIcon = themeToggleBtn.querySelector('i');
     const html = document.documentElement;
@@ -907,8 +945,8 @@
       let opacityValue = 1;
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
 
           if (distance < (canvas.width / 7) * (canvas.height / 7)) {
             opacityValue = 1 - (distance / 20000);
