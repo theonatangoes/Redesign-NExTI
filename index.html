@@ -11,49 +11,111 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Outfit"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              blue: '#006CA5',
-              darkblue: '#004C74',
-              yellow: '#FFC20E',
-              gold: '#D4A000',
-              gray: '#f1f5f9',
-            }
-          },
-          animation: {
-            'pulse-custom': 'pulse-glow 2.5s infinite cubic-bezier(0.23, 1, 0.32, 1)',
-          },
-          keyframes: {
-            'pulse-glow': {
-              '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 194, 14, 0.4)' },
-              '50%': { transform: 'scale(1.05)', boxShadow: '0 0 20px 0 rgba(255, 194, 14, 0.7)' },
-            }
-          }
-        }
+  <style>
+    /* Preloader Styles - ATUALIZADO */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #006CA5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #preloader-logo-container {
+      width: 200px;
+      height: 150px;
+      position: relative;
+    }
+
+    @media (min-width: 640px) {
+      #preloader-logo-container {
+        width: 300px;
+        height: 200px;
       }
     }
-  </script>
 
-  <script>
-    if (localStorage.theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
+    #preloader-logo {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
     }
-  </script>
 
-  <style>
+    #logo-path {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 100;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 10000;
+      stroke-dashoffset: 10000;
+      transition: fill 1.5s cubic-bezier(0.33, 1, 0.68, 1) 0.5s;
+    }
+
+    /* Efeito de brilho durante a animação */
+    #logo-path.animating {
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+    }
+
+    /* Efeito de preenchimento suave */
+    #logo-path.filling {
+      fill: #FFC20E;
+      fill-opacity: 0;
+      animation: fillGrow 2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    }
+
+    @keyframes fillGrow {
+      0% {
+        fill-opacity: 0;
+        filter: drop-shadow(0 0 5px rgba(255, 194, 14, 0.3));
+      }
+
+      50% {
+        fill-opacity: 0.5;
+        filter: drop-shadow(0 0 10px rgba(255, 194, 14, 0.5));
+      }
+
+      100% {
+        fill-opacity: 1;
+        filter: drop-shadow(0 0 15px rgba(255, 194, 14, 0.7));
+      }
+    }
+
+    /* Otimizações de performance */
+    #preloader-logo {
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+
+    #logo-path {
+      will-change: stroke-dashoffset, fill, fill-opacity;
+    }
+
+    /* Garantir que o conteúdo fique oculto durante o preloader */
+    body.preloader-active {
+      overflow: hidden;
+    }
+
+    body.preloader-active main,
+    body.preloader-active header,
+    body.preloader-active footer {
+      opacity: 0;
+    }
+
+    /* Estilos existentes mantidos... */
     :root {
-      --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-smooth: cubic-bezier(0.33, 1, 0.68, 1);
       --anim-duration: 1s;
     }
 
@@ -511,6 +573,15 @@
 
 <body class="flex flex-col min-h-screen dark:bg-slate-900 transition-colors duration-300">
 
+  <!-- Preloader ATUALIZADO -->
+  <div id="preloader" class="hidden">
+    <div id="preloader-logo-container">
+      <svg id="preloader-logo" viewBox="0 0 45298.44 17166.27">
+        <path id="logo-path" d="M7354.82 4117.34c-275.65,-418 -395.57,-877.06 -155.3,-1405.04 146.32,-321.53 540.41,-695.71 932.02,-786.65 1060.4,-246.22 1847.91,572.42 1770.81,1563.48 -36.8,546.51 -533.11,1016.08 -1014.45,1145.82 -628.74,169.47 -1256.39,-102.15 -1533.07,-517.61zm27405.84 7384.79c44.14,114.91 -65.26,79.9 137.14,136.46l1473.66 -27.58c69.6,-144.04 124.78,-870.48 -0.39,-988.92 -143.16,-156.54 -194.85,-37.14 -523,-72.46 -218.14,-23.48 -592.94,-522.43 -751.15,-706.47 -491.48,-571.71 -374.87,-518.87 61.92,-1040.83 122.74,-146.67 308.14,-377.64 420.92,-477.98 203.08,-18.26 485.18,26.65 639.39,-57.79 92.23,-213.54 53.42,-633.88 32.99,-923.39l-2033.31 15.19c-15.49,189.26 -18.57,402.75 -17.99,593.29 0.45,150.47 -3.84,186.2 58.26,264.54 63.64,80.29 3.54,-1.15 77.31,65.59 72.72,65.77 17.27,-39.49 76.4,75.9 -85.01,164.1 -149.41,318.84 -336.81,359.59 -150.44,-179.37 -260.23,-379.01 -404.43,-592.51 -134.7,-199.43 -254.97,-384.92 -376.43,-579.92 -195.99,-314.63 -315.8,-223.97 -768.44,-224.32l-730.63 -3.42c-200.96,22.31 -84.32,-14.6 -164.16,57.26 -109.33,157.96 -59.17,716.17 -25.28,946.08 672,84.19 520.52,-160.64 917.1,359.93 653.93,858.4 736.91,654.18 -47.82,1540.71 -493.84,557.9 -164.94,260.64 -927.32,392.92 -141.79,1109.48 20.86,979.93 522.15,975.32 595.75,-5.49 1472.65,126.77 1537.61,-143.61l14.11 -307.35c-0.85,-153.52 0.98,-299.92 -6.05,-462.25l-260.45 -85.58c16.28,-149.05 251.44,-500.07 401.06,-473.09 84,15.15 965.91,1308.94 1003.64,1384.68zm-4587.2 -3387.42c-57.91,-188.42 -464.16,-115.84 -882.17,-113.06 -155.87,1.03 -832.23,52.96 -920.28,-48.61 -69.92,-158.61 -71.72,-893.65 7.39,-1053.55 206.94,-69.43 1148.7,-24.37 1429.4,-18.54 92.38,95.11 82.31,334.86 132.8,552.13 1211.88,61.27 976.72,39.27 978.49,-806.99 0.54,-261.61 35.55,-612.63 -34.53,-820.09 -237.6,-96.24 -2788.61,-39.16 -3416.02,-38.85 -1150.94,0.58 -1289.5,-301.73 -1165.91,978.17l615.21 64.93c48.19,518.43 10.2,2159.02 8.82,2868.93 -2.4,1239.08 -11.34,771.88 -605.29,950.44 -79.09,228.02 -59.79,664.35 -19.75,946.38 463.28,51.95 4607.7,55.76 4773.59,-28.51 107.28,-189.57 75.47,-1380.15 39.47,-1684.98l-985.4 -4.48c-27.5,100.38 -31.88,200.45 -37.99,322.31 -3.01,59.9 -2.25,120.79 -14.71,179.65 -12.93,61.01 0.93,137.5 -120.36,169.21 -212.9,55.67 -1415.8,24.34 -1624.28,14.93l-20.91 -1413.38c1929.11,-98.07 1990.85,384.09 1862.42,-1016.03zm-22473.12 599.48c90.14,-116.36 161.46,-281.88 173.64,-453.7 -173.4,-112.74 -403.34,-225.13 -509.15,-422.63 -168.7,-27.31 -716.75,-484.52 -875.51,-603.3l-1721.55 -1282.16c-204.08,-138.88 -672.9,-529.95 -882.69,-621.48 -109.02,-151.13 -178.26,-111.66 -292.11,-298.11l4600.32 485.35c1147.81,50.32 958.45,246.19 1577.19,-324.89l1513.92 -1399.29c249.95,-219.87 1466.24,-1373.56 1631.36,-1427.59 -9.61,260.28 -517.15,2596.01 -644.21,3039.55 -48.04,167.7 -54.2,439.15 -103.52,643.36 -62.32,258.08 -242.08,1018.59 -224.36,1251.2l1285.03 851.76c132.85,88.43 201.84,156.5 316.76,223.45 127.16,74.07 217.69,133.42 337.15,216.84 212.78,148.61 453.93,291.89 657.31,435.95 450.09,318.81 845.98,593.64 1288.19,896.81 211.03,144.68 452.81,311.69 666.92,433.32 186.34,105.84 462.06,333.49 629.46,453.89 99.55,-22.72 65.85,-6.25 153.07,-45.91 -37.95,-553.22 765.56,-2632.37 -322.71,-5251.4 -625.35,-1504.97 -1436.09,-2619.76 -2530.65,-3523.44 -1059.66,-874.89 -2813.81,-1743.03 -4177.79,-1892.4 -2202.33,-241.21 -3465.56,-55.12 -5197.02,689.81 -1319.89,567.86 -2643.84,1636.71 -3370.49,2693.1 -462.34,672.13 -769.11,1126.57 -1087.64,1975.59 -456.57,1216.94 -432.85,1100.7 -556.83,2441.78 -267.68,2895.55 1046.94,5662.95 3182.48,7344.72 155.52,122.47 804.55,525.4 829.64,608.59l227.82 4.64 1712 -3558c371.43,-797.94 1492.7,-2975.28 1713.95,-3585.37zm14163.06 -2672.13c-180.61,-471.18 -569.44,-327.12 -1093.42,-327.12 -353.94,0 -961.56,-51.62 -1276.57,49.28 -31.07,131.6 -88.12,902.89 40.77,1011.44 169.47,86.4 308.59,29.46 512.65,72.39 93.34,241.07 66.54,3519.67 -15.13,3646.39 -188.49,104.71 -313.46,-18.74 -552.73,123.67l-23.39 790.63c7.13,66.3 4.84,55.63 24.14,109.39 90.38,251.66 979.9,124.34 1381.4,124.15 1374.81,-0.7 1363.02,195.42 1277.57,-1011.57 -200.11,-165.11 -385.46,-40.9 -654.21,-152.68l0.8 -2553.04c8.46,12.19 46.72,71.61 54.56,79.61 95.64,97.46 -60.92,-15.9 100.62,79.45l1938.18 3118.44c251.52,496.42 333.39,384.37 1019.09,385.59 255.16,0.45 523.85,47.79 621.03,-59.64 95.2,-105.25 48.03,-3517.55 45.79,-4173.32l16.04 -447.67c22.6,-93.03 8.93,-51.59 44.82,-125.59l532.43 -36.23c19.56,-168.77 14.45,-315.62 15.53,-484.44 2.8,-443.53 -27.02,-324.31 -36.28,-419.55 -12.58,-129.47 -1859.98,-84.21 -2200.21,-77.36 -337.77,6.78 -303.78,12.66 -305.91,543.27 -0.28,70.14 -7.41,212.85 -0.14,274.45 51.44,435.67 372.23,27.07 583.39,264.74 94.72,185.71 67.17,2071.3 38.92,2415.05 -180.26,-61.99 -866.76,-1366.12 -1062.4,-1613.33 -314.22,-397.06 -795.68,-1108.98 -1027.33,-1606.38zm-5610.74 5550.61c-67.79,-28.13 -734.77,-153.2 -862.32,-176.32 -633.65,-114.83 -4372.04,-928.83 -4535.44,-887.54 -115.05,29.06 -5067.97,4477.13 -5776.56,5103.76 -132.76,106.23 -306.52,301.2 -473.09,392.81l-0.74 144.23c81.57,0.96 650.66,268.07 828.11,334.56 1120.46,419.93 1517.04,508.12 2820.21,640.67 722.52,73.5 1986.13,-53.33 2705.15,-211.18 94.23,-20.69 270.08,-103.49 418.38,-152.32 1854.55,-610.49 3615.65,-1779.05 4689.27,-3419.79l826.37 -1468.37 -1.89 -189.84 -637.47 -110.67zm26116.79 -4692.96c404.58,0 298.37,-3.01 374.92,122.47l18.12 376.38c-0.88,610.45 29.55,2578.24 -18.41,2882.47 -225.85,22.68 -503.05,-39.53 -578.81,138.97 -57.73,136.02 -55.3,-34.18 -56.19,306.11 -0.54,205.3 -14.74,1010.18 45.83,1080.45 122.48,142.1 2051.86,79.23 2356.27,78.63 417.25,-0.83 715.95,73.99 778.06,-163.28 3.5,-13.36 6.41,-24.8 9.21,-39.38l-6.12 -1283.54c-166.48,-88.22 -66.45,-100.4 -280.11,-123.82 -184.07,-20.19 -220.74,34.9 -364.65,-47.56 -107.83,-103.44 -43.5,-3097.21 -34.76,-3184.74l578.56 -55.78c88.18,-179.06 56.84,-476.99 56.91,-725.55 0.21,-571.8 101.46,-754.1 -415.68,-755.23l-2501.98 20.38c-212.78,66.94 -46.9,1239.33 38.84,1373.04zm-5803.67 944.04c76.97,-93.35 192.61,-24.05 563.18,-18.29l671.47 -40.55c316.53,-119.75 -172.34,-866.9 374.76,-870.86 152.94,-1.11 132.14,-3.9 229.81,71.81 80.32,171.31 68.91,3042.91 8.41,3296.64 -179.46,56.78 -508.23,14.17 -670.2,102.14 -84.76,163.16 -123.99,1234.74 7.1,1409.46 122.14,123.29 2324.22,70.77 2799.31,71.24 76.26,0.08 139.39,5.61 214.19,-15.14 155.48,-43.13 83.99,-26.26 140.86,-88.65 78.29,-173.06 45.66,-1123.86 21.31,-1371.07l-43.85 -87.28c-534.92,-43.58 -624.99,87.89 -647.8,-255.28l2.36 -1690.25c-2.52,-1183.91 -148.87,-1575.56 417.39,-1338.56 37.67,406.54 -115.41,799.28 299.11,840.62 428.43,42.73 1053.45,127.66 1148.75,-193.23 111.56,-375.93 -14.25,-1640 -41.15,-2068.18 -130.09,-157.86 -178.66,-144.39 -463.68,-142.14 -1178.75,9.29 -4267.8,-56.68 -4969.27,13.64 -74.05,474.61 -62.97,2375.1 -62.05,2373.92z" />
+      </svg>
+    </div>
+  </div>
+
   <div id="reading-progress"></div>
 
   <div id="back-to-top">
@@ -584,393 +655,395 @@
     </div>
   </header>
 
-  <section id="home" class="py-16 lg:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300">
-    <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-gray dark:bg-slate-800 -skew-x-12 opacity-70 z-0 transition-colors duration-300"></div>
+  <main>
+    <section id="home" class="py-16 lg:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300">
+      <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-gray dark:bg-slate-800 -skew-x-12 opacity-70 z-0 transition-colors duration-300"></div>
 
-    <div class="container mx-auto px-4 sm:px-6 relative z-10">
-      <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
-        <div class="lg:w-1/2 space-y-4 lg:space-y-6 reveal-on-scroll reveal-left">
-          <span class="inline-block py-1 px-3 lg:px-4 rounded-full bg-blue-50 dark:bg-slate-800 text-brand-blue dark:text-brand-yellow text-xs font-bold tracking-wider border border-brand-blue/20 dark:border-brand-yellow/20">INOVAÇÃO & EDUCAÇÃO</span>
+      <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+          <div class="lg:w-1/2 space-y-4 lg:space-y-6 reveal-on-scroll reveal-left">
+            <span class="inline-block py-1 px-3 lg:px-4 rounded-full bg-blue-50 dark:bg-slate-800 text-brand-blue dark:text-brand-yellow text-xs font-bold tracking-wider border border-brand-blue/20 dark:border-brand-yellow/20">INOVAÇÃO & EDUCAÇÃO</span>
 
-          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 dark:text-white leading-tight">
-            Núcleo de Extensão em <br><span class="gradient-text">Tecnologia da Informação</span>
-          </h1>
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 dark:text-white leading-tight">
+              Núcleo de Extensão em <br><span class="gradient-text">Tecnologia da Informação</span>
+            </h1>
 
-          <p class="text-sm lg:text-lg text-gray-600 dark:text-gray-300 font-light leading-relaxed max-w-xl">
-            Transformando alunos em profissionais excepcionais através de desafios reais e inovação constante.
-          </p>
+            <p class="text-sm lg:text-lg text-gray-600 dark:text-gray-300 font-light leading-relaxed max-w-xl">
+              Transformando alunos em profissionais excepcionais através de desafios reais e inovação constante.
+            </p>
 
-          <div class="flex flex-wrap gap-3 lg:gap-4 pt-4">
-            <a href="#projetos" class="px-6 lg:px-8 py-3 lg:py-4 rounded-lg bg-brand-yellow text-brand-blue font-bold shadow-lg hover:bg-brand-gold hover:text-white transition-all duration-300 transform hover:-translate-y-1 animate-pulse-custom">
-              Ver Projetos
-            </a>
-            <a href="#sobre" class="px-6 lg:px-8 py-3 lg:py-4 rounded-lg border-2 border-brand-blue dark:border-white text-brand-blue dark:text-white font-bold hover:bg-brand-blue dark:hover:bg-white hover:text-white dark:hover:text-brand-blue transition-all duration-300">
-              Saiba Mais
-            </a>
+            <div class="flex flex-wrap gap-3 lg:gap-4 pt-4">
+              <a href="#projetos" class="px-6 lg:px-8 py-3 lg:py-4 rounded-lg bg-brand-yellow text-brand-blue font-bold shadow-lg hover:bg-brand-gold hover:text-white transition-all duration-300 transform hover:-translate-y-1 animate-pulse-custom">
+                Ver Projetos
+              </a>
+              <a href="#sobre" class="px-6 lg:px-8 py-3 lg:py-4 rounded-lg border-2 border-brand-blue dark:border-white text-brand-blue dark:text-white font-bold hover:bg-brand-blue dark:hover:bg-white hover:text-white dark:hover:text-brand-blue transition-all duration-300">
+                Saiba Mais
+              </a>
+            </div>
+          </div>
+
+          <div class="lg:w-1/2 reveal-on-scroll reveal-scale delay-200">
+            <div class="relative px-4">
+              <div class="absolute -inset-2 lg:-inset-4 bg-brand-yellow rounded-full blur-3xl opacity-20"></div>
+              <img src="image/nextialunos-3SZUrtlU.jpg" class="relative rounded-2xl shadow-2xl border-4 border-white dark:border-slate-700 rotate-0 md:rotate-2 hover:rotate-0 transition-all duration-700 w-full h-auto max-w-md lg:max-w-full mx-auto object-cover">
+            </div>
           </div>
         </div>
 
-        <div class="lg:w-1/2 reveal-on-scroll reveal-scale delay-200">
-          <div class="relative px-4">
-            <div class="absolute -inset-2 lg:-inset-4 bg-brand-yellow rounded-full blur-3xl opacity-20"></div>
-            <img src="image/nextialunos-3SZUrtlU.jpg" class="relative rounded-2xl shadow-2xl border-4 border-white dark:border-slate-700 rotate-0 md:rotate-2 hover:rotate-0 transition-all duration-700 w-full h-auto max-w-md lg:max-w-full mx-auto object-cover">
-          </div>
+        <div class="flex justify-center mt-12 lg:mt-20 animate-bounce">
+          <i class="fa-solid fa-chevron-down text-brand-yellow text-2xl"></i>
         </div>
       </div>
+    </section>
 
-      <div class="flex justify-center mt-12 lg:mt-20 animate-bounce">
-        <i class="fa-solid fa-chevron-down text-brand-yellow text-2xl"></i>
-      </div>
-    </div>
-  </section>
+    <section id="sobre" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+      <div class="absolute top-20 left-[-10%] w-64 lg:w-96 h-64 lg:h-96 bg-blue-200 dark:bg-blue-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
+      <div class="absolute bottom-20 right-[-10%] w-64 lg:w-96 h-64 lg:h-96 bg-yellow-200 dark:bg-yellow-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
 
-  <section id="sobre" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
-    <div class="absolute top-20 left-[-10%] w-64 lg:w-96 h-64 lg:h-96 bg-blue-200 dark:bg-blue-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
-    <div class="absolute bottom-20 right-[-10%] w-64 lg:w-96 h-64 lg:h-96 bg-yellow-200 dark:bg-yellow-900 rounded-full filter blur-[120px] opacity-30 pointer-events-none"></div>
-
-    <div class="container mx-auto px-4 sm:px-6 relative z-10">
-      <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
-        <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Sobre o <span class="text-brand-blue">NExTI</span></h2>
-        <div class="h-1.5 w-24 bg-brand-yellow mx-auto rounded-full"></div>
-      </div>
-
-      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 lg:mb-20">
-        <div class="space-y-4 lg:space-y-6">
-          <div class="value-item shadow-lg border-l-4 border-brand-yellow reveal-on-scroll reveal-left delay-100">
-            <div class="flex items-center gap-3 mb-3">
-              <i class="fa-solid fa-rocket text-xl lg:text-2xl text-brand-yellow"></i>
-              <h3 class="text-xl lg:text-2xl font-bold text-slate-800 dark:text-white">Missão</h3>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 text-justify">Capacitar nossos estudantes para se tornarem profissionais excepcionais em tecnologia da informação, prontos para enfrentar desafios complexos e contribuir para a inovação na sociedade.</p>
-          </div>
-          <div class="value-item shadow-lg border-l-4 border-brand-blue reveal-on-scroll reveal-left delay-200">
-            <div class="flex items-center gap-3 mb-3">
-              <i class="fa-solid fa-eye text-xl lg:text-2xl text-brand-blue"></i>
-              <h3 class="text-xl lg:text-2xl font-bold text-slate-800 dark:text-white">Visão</h3>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 text-justify">Almejamos ser reconhecidos como líderes na formação de profissionais em tecnologia da informação, tanto em nossa instituição como em âmbito local e regional.</p>
-          </div>
+      <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
+          <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Sobre o <span class="text-brand-blue">NExTI</span></h2>
+          <div class="h-1.5 w-24 bg-brand-yellow mx-auto rounded-full"></div>
         </div>
 
-        <div>
-          <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-6 lg:mb-8 text-center lg:text-left reveal-on-scroll reveal-right">Nossos <span class="text-brand-yellow">Valores</span></h3>
-          <div class="grid grid-cols-2 lg:grid-cols-2 gap-3 lg:gap-4">
-            <div class="value-item reveal-on-scroll reveal-up delay-100">
-              <i class="fa-solid fa-book-open text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Aprendizado</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Busca constante pelo conhecimento.</p>
-            </div>
-            <div class="value-item reveal-on-scroll reveal-up delay-200">
-              <i class="fa-solid fa-lightbulb text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Inovação</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Criatividade e soluções inovadoras.</p>
-            </div>
-            <div class="value-item reveal-on-scroll reveal-up delay-300">
-              <i class="fa-solid fa-scale-balanced text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Ética</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Integridade e responsabilidade.</p>
-            </div>
-            <div class="value-item reveal-on-scroll reveal-up delay-400">
-              <i class="fa-solid fa-users text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Equipe</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Importância da colaboração.</p>
-            </div>
-            <div class="value-item reveal-on-scroll reveal-up delay-500">
-              <i class="fa-solid fa-briefcase text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Empreendedorismo</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Mentalidade empresarial.</p>
-            </div>
-            <div class="value-item reveal-on-scroll reveal-up delay-500">
-              <i class="fa-solid fa-hand-holding-heart text-brand-blue mb-2 text-lg lg:text-xl"></i>
-              <h4 class="font-bold text-slate-800 dark:text-white">Comunidade</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Contribuição social.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="objetivos" class="py-16 lg:py-24 bg-white dark:bg-slate-900 relative transition-colors duration-300">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
-        <div>
-          <h3 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-6 lg:mb-8 reveal-on-scroll reveal-left">Objetivos <span class="text-brand-yellow">Institucionais</span></h3>
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 lg:mb-20">
           <div class="space-y-4 lg:space-y-6">
-            <div class="flex gap-4 reveal-on-scroll reveal-left delay-100">
-              <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">1</div>
-              <div>
-                <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Experiência Prática</h4>
-                <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Aplicar conhecimento teórico em situações práticas.</p>
+            <div class="value-item shadow-lg border-l-4 border-brand-yellow reveal-on-scroll reveal-left delay-100">
+              <div class="flex items-center gap-3 mb-3">
+                <i class="fa-solid fa-rocket text-xl lg:text-2xl text-brand-yellow"></i>
+                <h3 class="text-xl lg:text-2xl font-bold text-slate-800 dark:text-white">Missão</h3>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-justify">Capacitar nossos estudantes para se tornarem profissionais excepcionais em tecnologia da informação, prontos para enfrentar desafios complexos e contribuir para a inovação na sociedade.</p>
+            </div>
+            <div class="value-item shadow-lg border-l-4 border-brand-blue reveal-on-scroll reveal-left delay-200">
+              <div class="flex items-center gap-3 mb-3">
+                <i class="fa-solid fa-eye text-xl lg:text-2xl text-brand-blue"></i>
+                <h3 class="text-xl lg:text-2xl font-bold text-slate-800 dark:text-white">Visão</h3>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-justify">Almejamos ser reconhecidos como líderes na formação de profissionais em tecnologia da informação, tanto em nossa instituição como em âmbito local e regional.</p>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-6 lg:mb-8 text-center lg:text-left reveal-on-scroll reveal-right">Nossos <span class="text-brand-yellow">Valores</span></h3>
+            <div class="grid grid-cols-2 lg:grid-cols-2 gap-3 lg:gap-4">
+              <div class="value-item reveal-on-scroll reveal-up delay-100">
+                <i class="fa-solid fa-book-open text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Aprendizado</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Busca constante pelo conhecimento.</p>
+              </div>
+              <div class="value-item reveal-on-scroll reveal-up delay-200">
+                <i class="fa-solid fa-lightbulb text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Inovação</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Criatividade e soluções inovadoras.</p>
+              </div>
+              <div class="value-item reveal-on-scroll reveal-up delay-300">
+                <i class="fa-solid fa-scale-balanced text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Ética</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Integridade e responsabilidade.</p>
+              </div>
+              <div class="value-item reveal-on-scroll reveal-up delay-400">
+                <i class="fa-solid fa-users text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Equipe</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Importância da colaboração.</p>
+              </div>
+              <div class="value-item reveal-on-scroll reveal-up delay-500">
+                <i class="fa-solid fa-briefcase text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Empreendedorismo</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Mentalidade empresarial.</p>
+              </div>
+              <div class="value-item reveal-on-scroll reveal-up delay-500">
+                <i class="fa-solid fa-hand-holding-heart text-brand-blue mb-2 text-lg lg:text-xl"></i>
+                <h4 class="font-bold text-slate-800 dark:text-white">Comunidade</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Contribuição social.</p>
               </div>
             </div>
-            <div class="flex gap-4 reveal-on-scroll reveal-left delay-200">
-              <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">2</div>
-              <div>
-                <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Integração com o Mercado</h4>
-                <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Parcerias estratégicas com empresas locais.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="objetivos" class="py-16 lg:py-24 bg-white dark:bg-slate-900 relative transition-colors duration-300">
+      <div class="container mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+          <div>
+            <h3 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-6 lg:mb-8 reveal-on-scroll reveal-left">Objetivos <span class="text-brand-yellow">Institucionais</span></h3>
+            <div class="space-y-4 lg:space-y-6">
+              <div class="flex gap-4 reveal-on-scroll reveal-left delay-100">
+                <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">1</div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Experiência Prática</h4>
+                  <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Aplicar conhecimento teórico em situações práticas.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 reveal-on-scroll reveal-left delay-200">
+                <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">2</div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Integração com o Mercado</h4>
+                  <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Parcerias estratégicas com empresas locais.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 reveal-on-scroll reveal-left delay-300">
+                <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">3</div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Aprimoramento Profissional</h4>
+                  <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Desenvolvimento de hard skills e soft skills.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 reveal-on-scroll reveal-left delay-400">
+                <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">4</div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Inovação e Pesquisa</h4>
+                  <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Estimular pesquisa e desenvolvimento.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 reveal-on-scroll reveal-left delay-500">
+                <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">5</div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Serviço à Comunidade</h4>
+                  <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Soluções tecnológicas que beneficiem a comunidade.</p>
+                </div>
               </div>
             </div>
-            <div class="flex gap-4 reveal-on-scroll reveal-left delay-300">
-              <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">3</div>
-              <div>
-                <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Aprimoramento Profissional</h4>
-                <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Desenvolvimento de hard skills e soft skills.</p>
+          </div>
+
+          <div class="space-y-8 lg:space-y-12">
+            <div class="rounded-2xl overflow-hidden shadow-xl group relative reveal-on-scroll reveal-up delay-200 w-full mx-auto max-w-full">
+              <div class="aspect-video w-full">
+                <img src="image/nexti-BKIt4bnr.jpg" class="w-full h-full object-cover block">
               </div>
-            </div>
-            <div class="flex gap-4 reveal-on-scroll reveal-left delay-400">
-              <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">4</div>
-              <div>
-                <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Inovação e Pesquisa</h4>
-                <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Estimular pesquisa e desenvolvimento.</p>
-              </div>
-            </div>
-            <div class="flex gap-4 reveal-on-scroll reveal-left delay-500">
-              <div class="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-sm lg:text-base">5</div>
-              <div>
-                <h4 class="font-bold text-slate-800 dark:text-white text-base lg:text-lg">Serviço à Comunidade</h4>
-                <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Soluções tecnológicas que beneficiem a comunidade.</p>
+              <div class="absolute bottom-0 left-0 w-full p-4 lg:p-6 bg-gradient-to-t from-black/80 to-transparent">
+                <p class="text-white font-bold text-lg lg:text-xl">Cultura Maker</p>
+                <p class="text-brand-yellow text-xs lg:text-sm">Criatividade em cada peça</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="space-y-8 lg:space-y-12">
-          <div class="rounded-2xl overflow-hidden shadow-xl group relative reveal-on-scroll reveal-up delay-200 w-full mx-auto max-w-full">
-            <div class="aspect-video w-full">
-              <img src="image/nexti-BKIt4bnr.jpg" class="w-full h-full object-cover block">
-            </div>
-            <div class="absolute bottom-0 left-0 w-full p-4 lg:p-6 bg-gradient-to-t from-black/80 to-transparent">
-              <p class="text-white font-bold text-lg lg:text-xl">Cultura Maker</p>
-              <p class="text-brand-yellow text-xs lg:text-sm">Criatividade em cada peça</p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- SEÇÃO DE PARCEIROS CORRIGIDA -->
+        <div class="mt-16 lg:mt-20">
+          <h4 class="text-gray-600 dark:text-gray-400 text-sm lg:text-base font-bold uppercase tracking-widest mb-6 lg:mb-8 text-center w-full reveal-on-scroll reveal-up">Nossos Parceiros</h4>
 
-      <!-- SEÇÃO DE PARCEIROS CORRIGIDA -->
-      <div class="mt-16 lg:mt-20">
-        <h4 class="text-gray-600 dark:text-gray-400 text-sm lg:text-base font-bold uppercase tracking-widest mb-6 lg:mb-8 text-center w-full reveal-on-scroll reveal-up">Nossos Parceiros</h4>
-
-        <div class="logos-slider-container reveal-on-scroll reveal-up delay-100">
-          <div class="logos-slider">
-            <div class="logos-slide">
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
-              <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
-              <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
-              <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
-              <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
-            </div>
-            <div class="logos-slide">
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
-              <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
-              <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
-              <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
-              <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
-              <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+          <div class="logos-slider-container reveal-on-scroll reveal-up delay-100">
+            <div class="logos-slider">
+              <div class="logos-slide">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+              </div>
+              <div class="logos-slide">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+                <img src="image/SitioBarreiras.png" alt="Sítio Barreiras" class="partner-logo-img" title="Sítio Barreiras">
+                <img src="image/Brisanet.png" alt="Brisanet" class="partner-logo-img" title="Brisanet">
+                <img src="image/unifap logo.png" alt="Unifap" class="partner-logo-img" title="Unifap">
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="projetos" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
-    <div class="absolute top-1/2 left-1/4 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-blue-100 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-40 pointer-events-none"></div>
+    <section id="projetos" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+      <div class="absolute top-1/2 left-1/4 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-blue-100 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-40 pointer-events-none"></div>
 
-    <div class="container mx-auto px-4 sm:px-6 relative z-10">
-      <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
-        <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Nossos <span class="text-brand-blue">Projetos</span></h2>
-        <p class="text-gray-500 dark:text-gray-400">Soluções reais desenvolvidas pelos nossos talentos.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/Ponto.png" alt="Ponto Eletrônico">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Ponto Eletrônico</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">O Ponto Eletrônico consiste em um ambiente virtual em que os alunos possam registrar seu ponto de entrada e saída.</p>
-          </div>
+      <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
+          <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Nossos <span class="text-brand-blue">Projetos</span></h2>
+          <p class="text-gray-500 dark:text-gray-400">Soluções reais desenvolvidas pelos nossos talentos.</p>
         </div>
 
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/PEstagio.png" alt="Plataforma de Estágio">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/Ponto.png" alt="Ponto Eletrônico">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Ponto Eletrônico</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">O Ponto Eletrônico consiste em um ambiente virtual em que os alunos possam registrar seu ponto de entrada e saída.</p>
+            </div>
           </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Plataforma de Estágio</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">A Plataforma de estágio consiste em ajudar pessoas a começar no mercado de trabalho.</p>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/PEstagio.png" alt="Plataforma de Estágio">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Plataforma de Estágio</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">A Plataforma de estágio consiste em ajudar pessoas a começar no mercado de trabalho.</p>
+            </div>
           </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/BancoT.png" alt="Banco de Talentos">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Banco de Talentos</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">O banco de talentos consiste em ajudar pessoas a aprimorar seus pontos fortes ou mesmo a descobri-los.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/npj.jpg" alt="Acompanhamento NPJ">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que facilita o acompanhamento dos processos do NPJ, oferecendo ao professor mais controle e organização sobre cada caso.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/doacao.jpg" alt="Sistema de Doação">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema de Doação</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para instituições filantrópicas cadastrarem doadores e vincular doações à conta de energia.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/web.jpg" alt="Vocabulário Web">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Vocabulário Web</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Um sistema de dicionário web que facilita o aprendizado de palavras em inglês de forma gameficada.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/declara-o.jpg" alt="Gerador de Declarações">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Gerador de Declarações</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que gera declarações e relatórios personalizados com base em informações como nome, data, atividade e período.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/empreendedorismo.jpg" alt="Sistema Empreendedorismo">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema Empreendedorismo</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para o administrador gerenciar conteúdos sobre empreendedorismo, como artigos, imagens e entrevistas.</p>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
+            <div class="card-img-container">
+              <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
+              <img src="image/orcamento-servico.jpg" alt="Orçamento Serviço">
+            </div>
+            <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
+              <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Orçamento Serviço de Segurança</h3>
+              <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema mobile para gerenciamento de vendas de produtos vendidos e serviços.</p>
+            </div>
+          </div>
+
         </div>
 
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/BancoT.png" alt="Banco de Talentos">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Banco de Talentos</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">O banco de talentos consiste em ajudar pessoas a aprimorar seus pontos fortes ou mesmo a descobri-los.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/npj.jpg" alt="Acompanhamento NPJ">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Acompanhamento de Processos do NPJ</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que facilita o acompanhamento dos processos do NPJ, oferecendo ao professor mais controle e organização sobre cada caso.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/doacao.jpg" alt="Sistema de Doação">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema de Doação</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para instituições filantrópicas cadastrarem doadores e vincular doações à conta de energia.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/web.jpg" alt="Vocabulário Web">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Vocabulário Web</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Um sistema de dicionário web que facilita o aprendizado de palavras em inglês de forma gameficada.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-100">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/declara-o.jpg" alt="Gerador de Declarações">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Gerador de Declarações</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema que gera declarações e relatórios personalizados com base em informações como nome, data, atividade e período.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-200">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/empreendedorismo.jpg" alt="Sistema Empreendedorismo">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Sistema Empreendedorismo</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema para o administrador gerenciar conteúdos sobre empreendedorismo, como artigos, imagens e entrevistas.</p>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card group reveal-on-scroll reveal-up delay-300">
-          <div class="card-img-container">
-            <div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-transparent z-10 transition-colors"></div>
-            <img src="image/orcamento-servico.jpg" alt="Orçamento Serviço">
-          </div>
-          <div class="p-4 lg:p-6 flex flex-col flex-1 relative z-10">
-            <h3 class="text-lg lg:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-brand-blue transition-colors">Orçamento Serviço de Segurança</h3>
-            <p class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 flex-1">Sistema mobile para gerenciamento de vendas de produtos vendidos e serviços.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="text-center mt-10 lg:mt-12 reveal-on-scroll reveal-up delay-400">
-        <a href="projetos.html" class="inline-block px-6 lg:px-8 py-3 lg:py-4 rounded-lg bg-brand-blue text-white font-bold shadow-lg hover:bg-brand-darkblue hover:text-white transition-all duration-300 transform hover:-translate-y-1">
-          Ver Mais
-          <i class="fa-solid fa-arrow-right ml-2"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section id="eventos" class="py-16 lg:py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
-        <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Eventos & <span class="text-brand-yellow">Editais</span></h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-
-        <div class="liquid-glass-card p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-left delay-100">
-          <img src="image/imagem-edital-nexti.png" class="w-full h-48 lg:h-auto lg:w-40 xl:w-48 object-cover rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
-          <div class="text-center lg:text-left relative z-10">
-            <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1">NExTI Edital 2025.1</h3>
-            <p class="text-brand-blue font-bold text-xs lg:text-sm uppercase mb-3 lg:mb-4">Seleção de Estágio</p>
-            <p class="text-gray-600 dark:text-gray-300 text-xs lg:text-sm mb-4 lg:mb-6 text-justify">Seleção de colaboradores para o NExTI. Vagas com bolsa auxílio.</p>
-            <button class="px-5 lg:px-6 py-2 rounded-full bg-brand-blue text-white font-bold hover:bg-brand-darkblue transition-colors text-sm">Ver Edital Completo</button>
-          </div>
-        </div>
-
-        <div class="liquid-glass-card p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-right delay-200">
-          <img src="image/postNExTIAcce-Cj7p2tym.png" class="w-full h-48 lg:h-auto lg:w-40 xl:w-48 object-cover rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
-          <div class="text-center lg:text-left relative z-10">
-            <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1">Acceleration Startups</h3>
-            <p class="text-brand-yellow font-bold text-xs lg:text-sm uppercase mb-3 lg:mb-4">Programa Gratuito</p>
-            <p class="text-gray-600 dark:text-gray-300 text-xs lg:text-sm mb-4 lg:mb-6 text-justify">Capacitação para alunos com ideias inovadoras.</p>
-            <button class="px-5 lg:px-6 py-2 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white transition-colors text-sm">Inscrever-se Agora</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section id="time" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
-    <div class="absolute bottom-0 left-1/3 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-blue-50 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-50 pointer-events-none"></div>
-
-    <div class="container mx-auto px-4 sm:px-6 relative z-10">
-      <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
-        <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Nosso <span class="text-brand-blue">Time</span></h2>
-        <p class="text-gray-500 dark:text-gray-400">Liderança e Coordenação</p>
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-12 lg:gap-20">
-        <div class="group text-center reveal-on-scroll reveal-scale delay-100">
-          <div class="w-48 h-48 lg:w-64 lg:h-64 mx-auto rounded-full overflow-hidden border-4 lg:border-8 border-white dark:border-slate-700 shadow-2xl mb-4 lg:mb-6 relative">
-            <div class="absolute inset-0 bg-brand-yellow opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
-            <img src="image/fabricio-CLG1CeQt.jpg" alt="Fabrício Carneiro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          </div>
-          <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">Fabrício Carneiro</h3>
-          <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-xs lg:text-sm">Coordenador</p>
-          <div class="flex justify-center gap-3 lg:gap-4 mt-3">
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-lg lg:text-xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-lg lg:text-xl"></i></a>
-          </div>
-        </div>
-
-        <div class="group text-center reveal-on-scroll reveal-scale delay-300">
-          <div class="w-48 h-48 lg:w-64 lg:h-64 mx-auto rounded-full overflow-hidden border-4 lg:border-8 border-white dark:border-slate-700 shadow-2xl mb-4 lg:mb-6 relative">
-            <div class="absolute inset-0 bg-brand-blue opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
-            <img src="image/francisco-DwrxvW5U.jpg" alt="Francisco Rodrigues" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          </div>
-          <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">Francisco Rodrigues</h3>
-          <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-xs lg:text-sm">Professor</p>
-          <div class="flex justify-center gap-3 lg:gap-4 mt-3">
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-lg lg:text-xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-lg lg:text-xl"></i></a>
-          </div>
+        <div class="text-center mt-10 lg:mt-12 reveal-on-scroll reveal-up delay-400">
+          <a href="projetos.html" class="inline-block px-6 lg:px-8 py-3 lg:py-4 rounded-lg bg-brand-blue text-white font-bold shadow-lg hover:bg-brand-darkblue hover:text-white transition-all duration-300 transform hover:-translate-y-1">
+            Ver Mais
+            <i class="fa-solid fa-arrow-right ml-2"></i>
+          </a>
         </div>
       </div>
+    </section>
 
-      <div class="text-center mt-12 lg:mt-16 reveal-on-scroll reveal-up delay-400">
-        <a href="equipe.html" class="inline-block px-8 lg:px-10 py-3 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white hover:scale-105 transition-all shadow-lg animate-pulse-custom">
-          Ver Todos
-        </a>
+    <section id="eventos" class="py-16 lg:py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
+      <div class="container mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
+          <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Eventos & <span class="text-brand-yellow">Editais</span></h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+
+          <div class="liquid-glass-card p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-left delay-100">
+            <img src="image/imagem-edital-nexti.png" class="w-full h-48 lg:h-auto lg:w-40 xl:w-48 object-cover rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
+            <div class="text-center lg:text-left relative z-10">
+              <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1">NExTI Edital 2025.1</h3>
+              <p class="text-brand-blue font-bold text-xs lg:text-sm uppercase mb-3 lg:mb-4">Seleção de Estágio</p>
+              <p class="text-gray-600 dark:text-gray-300 text-xs lg:text-sm mb-4 lg:mb-6 text-justify">Seleção de colaboradores para o NExTI. Vagas com bolsa auxílio.</p>
+              <button class="px-5 lg:px-6 py-2 rounded-full bg-brand-blue text-white font-bold hover:bg-brand-darkblue transition-colors text-sm">Ver Edital Completo</button>
+            </div>
+          </div>
+
+          <div class="liquid-glass-card p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-center hover:shadow-xl transition-all reveal-on-scroll reveal-right delay-200">
+            <img src="image/postNExTIAcce-Cj7p2tym.png" class="w-full h-48 lg:h-auto lg:w-40 xl:w-48 object-cover rounded-xl shadow-md transform hover:scale-105 transition-transform relative z-10">
+            <div class="text-center lg:text-left relative z-10">
+              <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1">Acceleration Startups</h3>
+              <p class="text-brand-yellow font-bold text-xs lg:text-sm uppercase mb-3 lg:mb-4">Programa Gratuito</p>
+              <p class="text-gray-600 dark:text-gray-300 text-xs lg:text-sm mb-4 lg:mb-6 text-justify">Capacitação para alunos com ideias inovadoras.</p>
+              <button class="px-5 lg:px-6 py-2 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white transition-colors text-sm">Inscrever-se Agora</button>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section id="time" class="py-16 lg:py-24 bg-brand-gray dark:bg-slate-800 relative overflow-hidden transition-colors duration-300">
+      <div class="absolute bottom-0 left-1/3 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-blue-50 dark:bg-blue-900 rounded-full filter blur-[150px] opacity-50 pointer-events-none"></div>
+
+      <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-12 lg:mb-16 reveal-on-scroll reveal-up">
+          <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">Nosso <span class="text-brand-blue">Time</span></h2>
+          <p class="text-gray-500 dark:text-gray-400">Liderança e Coordenação</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-12 lg:gap-20">
+          <div class="group text-center reveal-on-scroll reveal-scale delay-100">
+            <div class="w-48 h-48 lg:w-64 lg:h-64 mx-auto rounded-full overflow-hidden border-4 lg:border-8 border-white dark:border-slate-700 shadow-2xl mb-4 lg:mb-6 relative">
+              <div class="absolute inset-0 bg-brand-yellow opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
+              <img src="image/fabricio-CLG1CeQt.jpg" alt="Fabrício Carneiro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            </div>
+            <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">Fabrício Carneiro</h3>
+            <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-xs lg:text-sm">Coordenador</p>
+            <div class="flex justify-center gap-3 lg:gap-4 mt-3">
+              <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-lg lg:text-xl"></i></a>
+              <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-lg lg:text-xl"></i></a>
+            </div>
+          </div>
+
+          <div class="group text-center reveal-on-scroll reveal-scale delay-300">
+            <div class="w-48 h-48 lg:w-64 lg:h-64 mx-auto rounded-full overflow-hidden border-4 lg:border-8 border-white dark:border-slate-700 shadow-2xl mb-4 lg:mb-6 relative">
+              <div class="absolute inset-0 bg-brand-blue opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
+              <img src="image/francisco-DwrxvW5U.jpg" alt="Francisco Rodrigues" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            </div>
+            <h3 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">Francisco Rodrigues</h3>
+            <p class="text-brand-blue font-bold uppercase tracking-wider mt-1 text-xs lg:text-sm">Professor</p>
+            <div class="flex justify-center gap-3 lg:gap-4 mt-3">
+              <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-brands fa-linkedin text-lg lg:text-xl"></i></a>
+              <a href="#" class="text-gray-400 hover:text-brand-blue"><i class="fa-solid fa-envelope text-lg lg:text-xl"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12 lg:mt-16 reveal-on-scroll reveal-up delay-400">
+          <a href="equipe.html" class="inline-block px-8 lg:px-10 py-3 rounded-full bg-brand-yellow text-brand-blue font-bold hover:bg-brand-gold hover:text-white hover:scale-105 transition-all shadow-lg animate-pulse-custom">
+            Ver Todos
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer id="contato" class="bg-brand-blue dark:bg-slate-900 text-white pt-12 lg:pt-16 pb-6 lg:pb-8 transition-colors duration-300">
     <div class="container mx-auto px-4 sm:px-6">
@@ -1018,6 +1091,150 @@
   </footer>
 
   <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#006CA5',
+              darkblue: '#004C74',
+              yellow: '#FFC20E',
+              gold: '#D4A000',
+              gray: '#f1f5f9',
+            }
+          },
+          animation: {
+            'pulse-custom': 'pulse-glow 2.5s infinite cubic-bezier(0.33, 1, 0.68, 1)',
+          },
+          keyframes: {
+            'pulse-glow': {
+              '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 194, 14, 0.4)' },
+              '50%': { transform: 'scale(1.05)', boxShadow: '0 0 20px 0 rgba(255, 194, 14, 0.7)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    // Sistema de controle do preloader
+    document.addEventListener('DOMContentLoaded', function () {
+      const preloader = document.getElementById('preloader');
+      const logoPath = document.getElementById('logo-path');
+
+      // Verificar se já vimos o preloader nesta sessão
+      // Usamos sessionStorage que dura apenas durante a sessão do navegador
+      // Se recarregar a página, a animação aparece novamente
+      // Mas se navegar para outra página e voltar, não aparece
+
+      const hasSeenPreloader = sessionStorage.getItem('preloaderShown');
+      const isPageRefresh = performance.navigation.type === 1; // 1 = página recarregada
+
+      // Se for um refresh ou primeira visita, mostrar o preloader
+      // Se for navegação entre páginas (voltar/avançar), não mostrar
+      if (isPageRefresh || !hasSeenPreloader) {
+        // Mostrar preloader
+        preloader.classList.remove('hidden');
+        document.body.classList.add('preloader-active');
+
+        // Função para easing suave
+        function customEase(t) {
+          return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        }
+
+        // Calcular o comprimento do traço
+        const pathLength = logoPath.getTotalLength();
+        logoPath.style.strokeDasharray = pathLength;
+        logoPath.style.strokeDashoffset = pathLength;
+
+        // Adicionar classe de animação ao contorno
+        logoPath.classList.add('animating');
+
+        // Configurações da animação
+        const drawDuration = 2800;
+        const fillDelay = 300;
+        const fillDuration = 1800;
+
+        let startTime = null;
+
+        function animatePreloader(timestamp) {
+          if (!startTime) startTime = timestamp;
+          const elapsed = timestamp - startTime;
+          const progress = Math.min(elapsed / drawDuration, 1);
+
+          // Aplicar easing personalizado
+          const easedProgress = customEase(progress);
+
+          // Atualizar stroke-dashoffset
+          const dashOffset = pathLength - (pathLength * easedProgress);
+          logoPath.style.strokeDashoffset = dashOffset;
+
+          if (progress < 1) {
+            requestAnimationFrame(animatePreloader);
+          } else {
+            // Remover classe de animação do contorno
+            logoPath.classList.remove('animating');
+
+            // Iniciar animação de preenchimento após um breve delay
+            setTimeout(() => {
+              // Adicionar classe para animação de preenchimento
+              logoPath.classList.add('filling');
+
+              // Após a animação, remover o preloader
+              setTimeout(() => {
+                preloader.classList.add('hidden');
+                document.body.classList.remove('preloader-active');
+
+                // Marcar que o preloader já foi mostrado nesta sessão
+                sessionStorage.setItem('preloaderShown', 'true');
+
+                // Ativar animações de scroll após o preloader
+                if (typeof observer !== 'undefined') {
+                  document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                    observer.observe(el);
+                  });
+                }
+              }, fillDuration + 300);
+            }, fillDelay);
+          }
+        }
+
+        // Iniciar animação
+        requestAnimationFrame(animatePreloader);
+
+        // Fallback: remover preloader após 5 segundos
+        setTimeout(() => {
+          if (!preloader.classList.contains('hidden')) {
+            preloader.classList.add('hidden');
+            document.body.classList.remove('preloader-active');
+            sessionStorage.setItem('preloaderShown', 'true');
+          }
+        }, 5000);
+      } else {
+        // Se já vimos o preloader, apenas ativar as animações de scroll
+        setTimeout(() => {
+          if (typeof observer !== 'undefined') {
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+              observer.observe(el);
+            });
+          }
+        }, 100);
+      }
+    });
+
+    // Tema Dark/Light
+    if (localStorage.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
     const themeIcon = themeToggleBtn ? themeToggleBtn.querySelector('i') : null;
@@ -1263,9 +1480,12 @@
       });
     }, observerOptions);
 
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-      observer.observe(el);
-    });
+    // Observar elementos de animação
+    setTimeout(() => {
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    }, 100);
   </script>
 </body>
 
