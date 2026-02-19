@@ -33,7 +33,7 @@ Este projeto é um **redesign conceitual** do site do **NExTI**, desenvolvido co
   https://nexti.fapce.edu.br
 
 - 🔗 **Redesign (Projeto de Estudo):**  
-  https://lnkd.in/eksaQPVg
+  https://theonatangoes.github.io/Redesign-NExTI/
 
 ---
 
